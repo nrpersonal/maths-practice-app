@@ -1,5 +1,9 @@
 {
-  "appId": "uk.mathspractice.tests",
+  "appId": "io.github.nrpersonal.mathstests",
   "appName": "Maths Tests",
-  "webDir": "www"
+  "webDir": "www",
+  "server": {
+    "url": "https://nrpersonal.github.io/maths-practice-app/www/index.html",
+    "cleartext": false
+  }
 }
