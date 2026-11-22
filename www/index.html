@@ -100,6 +100,7 @@ sup{font-size:.65em}
 <body>
 <div class="wrap" id="app"></div>
 <nav class="tabs" id="tabs"></nav>
+<script src="check.js"></script>
 <script>
 "use strict";
 // ==GEN START==
@@ -128,7 +129,7 @@ function polyAlts(ts,n=3,extra=[]){const out=[],seen=new Set([poly(ts)]);const a
  while(out.length<n+2&&g++<60){const t=ts.map(x=>x.slice());const i=R(0,t.length-1);const k=R(0,4);
   if(k===0)t[i][0]=-t[i][0];else if(k===1)t[i][0]+=1;else if(k===2)t[i][0]-=1;else if(k===3)t[i][0]+=R(2,4)*(rnd()<.5?1:-1);else{const j=R(0,t.length-1);t[i][0]=-t[i][0];t[j][0]+= (i===j?0:1)}
   add(t)}return out}
-const ord=k=>['','1st','2nd','3rd'][k]||k+'th';
+const ord=k=>{const t=k%100,u=k%10;return k+(t>=11&&t<=13?'th':u===1?'st':u===2?'nd':u===3?'rd':'th')};
 function roman(n){const m=[[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];let s='';for(const[v,r]of m)while(n>=v){s+=r;n-=v}return s}
 const isPrime=n=>{if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true};
 
@@ -151,6 +152,19 @@ function finalize(q){let correct,wrongs;
  const all=q.choices?[correct,...w]:shuffle([correct,...w]);
  q.opts=all.map(x=>x+u);q.correct=all.indexOf(correct);q.ans=correct+u;return q}
 
+/* ---------- answer checking (independent solver in check.js) ---------- */
+const canCheck=()=>typeof verifyQ==='function';
+// Apply a checker verdict to a question. Returns 'ok', 'fixed' or 'void'.
+function applyCheck(q,r){
+ if(r.status==='ok')return 'ok';
+ if(r.status==='fixed'){q.correct=r.correct;q.ans=q.opts[r.correct];q.sol='🔧 This answer was corrected by the checker.';return 'fixed'}
+ if(r.status==='none'&&r.answer){q.opts=q.opts.slice();q.opts[q.correct]=String(r.answer).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));q.ans=q.opts[q.correct];q.sol='🔧 This answer was corrected by the checker.';return 'fixed'}
+ return 'void'}
+const plainT=s=>String(s).replace(/<span class="fr"><span>([^<]*)<\/span><span>([^<]*)<\/span><\/span>/g,'$1/$2').replace(/<sup>([^<]*)<\/sup>/g,'^$1').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+function flagQ(q){const before=q.ans;const r=canCheck()?verifyQ(q):{status:'unknown'};const kind=applyCheck(q,r);if(kind==='void')q.void=true;q.flag=kind;
+ store.flags=(store.flags||[]).concat({d:Date.now(),topic:q.topic||'',q:plainT(q.q),opts:q.opts.map(plainT),was:plainT(before),now:plainT(q.ans),res:kind}).slice(-100);persist();return kind}
+function flagBox(q,reveal){if(!q.flag)return'';const m=q.flag==='ok'?(reveal?`🔍 Rechecked: <b>${q.ans}</b> is the right answer.`:'🔍 Rechecked: this question is correct.'):q.flag==='fixed'?(reveal?`✅ Corrected! The right answer is <b>${q.ans}</b>. Well spotted, thank you!`:'✅ Corrected! This question had a mistake and has been fixed. Well spotted!'):`🤔 This one couldn't be double-checked, so it won't count in your score. It's saved for a grown-up to look at.`;return `<div class="fb" style="background:var(--ambbg)">${m}</div>`}
+
 /* ---------- topics ---------- */
 const T={};const ORDER=[];
 function topic(id,y,name,hint,gen){T[id]={id,y,name,hint,gen};ORDER.push(id)}
@@ -168,7 +182,7 @@ topic('y1more',1,'One more, one less, ten more','One more = add 1. Ten more = ad
 topic('y2add',2,'Adding 2-digit numbers','Add the tens, then add the ones.',d=>{let a,b;if(d===1){a=R(10,89);b=R(2,9)}else if(d===2){a=R(10,60);b=R(11,99-a)}else{a=R(20,99);b=R(20,99)}const t=Math.floor(b/10)*10,o=b%10;return Q(`${a} + ${b} = ?`,a+b,{wrong:[a+b-10,a+b+10,a+b+1],sol:t?`${a} + ${t} = ${a+t}, then + ${o} = ${a+b}`:`Count on ${b} from ${a}: ${a+b}`})});
 topic('y2sub',2,'Subtracting 2-digit numbers','Take away the tens, then the ones.',d=>{let a,b;if(d===1){a=R(20,99);b=R(2,9)}else if(d===2){a=R(40,99);b=R(11,a-10)}else{a=R(100,199);b=R(21,99)}const t=Math.floor(b/10)*10,o=b%10;return Q(`${a} − ${b} = ?`,a-b,{wrong:[a-b+10,a-b-10,a-b+1],sol:t?`${a} − ${t} = ${a-t}, then − ${o} = ${a-b}`:`Count back ${b}: ${a-b}`})});
 topic('y2tab',2,'2, 5 and 10 times tables','Count in 2s, 5s or 10s.',d=>{const t=P([2,5,10]),n=R(1,12);return rnd()<(d===1?.8:.5)?Q(`${n} × ${t} = ?`,n*t,{wrong:[n*t+t,n*t-t,n+t],sol:`${n} lots of ${t} = ${n*t}`}):Q(`${n*t} ÷ ${t} = ?`,n,{wrong:[n+1,n-1,n*t-t],sol:`${n} × ${t} = ${n*t}, so ${n*t} ÷ ${t} = ${n}`})});
-topic('y2pv',2,'Place value','Tens are worth 10, ones are worth 1, hundreds are worth 100.',d=>{if(d===3){const h=R(1,9),t=R(0,9),o=R(0,9);return Q(`What is ${h} hundreds, ${t} tens and ${o} ones?`,h*100+t*10+o,{wrong:[h*100+o*10+t,h+t+o,h*10+t*100+o],sol:`${h*100} + ${t*10} + ${o} = ${h*100+t*10+o}`})}const t=R(1,9),o=R(0,9),n=t*10+o;return rnd()<.5?Q(`What is ${t} tens and ${o} ones?`,n,{wrong:[o*10+t,t+o,t*100+o],sol:`${t*10} + ${o} = ${n}`}):Q(`What is the value of the digit ${t} in ${n}?`,t*10,{wrong:[t,t*100,o],sol:`${t} is in the tens column, so it is worth ${t*10}`})});
+topic('y2pv',2,'Place value','Tens are worth 10, ones are worth 1, hundreds are worth 100.',d=>{if(d===3){const h=R(1,9),t=R(0,9),o=R(0,9);return Q(`What is ${h} hundreds, ${t} tens and ${o} ones?`,h*100+t*10+o,{wrong:[h*100+o*10+t,h+t+o,h*10+t*100+o],sol:`${h*100} + ${t*10} + ${o} = ${h*100+t*10+o}`})}const t=R(1,9),o=R(0,9),n=t*10+o;return rnd()<.5?Q(`What is ${t} tens and ${o} ones?`,n,{wrong:[o*10+t,t+o,t*100+o],sol:`${t*10} + ${o} = ${n}`}):(()=>{const o2=o===t?(o+1)%10:o,n2=t*10+o2;return Q(`What is the value of the digit ${t} in ${n2}?`,t*10,{wrong:[t,t*100,o2],sol:`${t} is in the tens column, so it is worth ${t*10}`})})()});
 topic('y2frac',2,'Halves, quarters and thirds','Half: share into 2. Quarter: share into 4. Third: share into 3.',d=>{const fl=d===1?[[1,2]]:d===2?[[1,2],[1,4],[1,3]]:[[1,2],[1,4],[1,3],[3,4],[2,3]];const[n,de]=P(fl),k=R(1,d===1?10:8),amt=de*k;return Q(`What is ${F(n,de)} of ${amt}?`,n*k,{wrong:[amt-n*k,k*2,amt/2],sol:`${amt} ÷ ${de} = ${k}${n>1?`, then × ${n} = ${n*k}`:''}`})});
 topic('y2money',2,'Money','100p = £1. Find change by counting up.',d=>{if(d===1){const a=P([1,2,5,10,20]),b=P([1,2,5,10,20,50]);return Q(`A ${a}p coin and a ${b}p coin. How much altogether?`,a+b,{unit:'p',sol:`${a} + ${b} = ${a+b}p`})}const pay=d===2?50:100,c=R(5,pay-1);return Q(`You pay ${pay===100?'£1':'50p'} for something that costs ${c}p. How much change?`,pay-c,{unit:'p',wrong:[pay-c+10,c,pay-c-1],sol:`${pay} − ${c} = ${pay-c}p`})});
 
@@ -261,7 +275,7 @@ topic('y8exp',8,'Expanding brackets','Multiply EVERY term inside the bracket by 
 topic('y8fac',8,'Factorising','Find the highest common factor of all terms and put it outside the bracket. Check by expanding.',d=>{const k=R(0,d===1?0:d===2?1:2);
  if(k===0){const m=R(2,9);let a=R(1,9),b=R(1,9);while(gcd(a,b)!==1)b=R(1,9);if(rnd()<.4)b=-b;const inside=poly([[a,'x'],[b,'']]);const g2=m%2===0?2:m%3===0?3:1;const w=[`${m*a}(x${sg(b===m*a?b+1:b)})`,`${m}(${poly([[a*m,'x'],[b,'']])})`];if(g2>1&&g2!==m)w.push(`${g2}(${poly([[m*a/g2,'x'],[m*b/g2,'']])})`);w.push(`${m}(${poly([[a,'x'],[-b,'']])})`);w.push(`${m}x(${poly([[a,''],[b,'']])})`);return Q(`Factorise fully: ${HP([[m*a,'x'],[m*b,'']])}`,H(`${m}(${inside})`),{wrong:w.map(H),sol:`HCF of ${m*a} and ${Math.abs(m*b)} is ${m}. ${m} × (${H(inside)}) — check: expands back`})}
  if(k===1){const m=R(1,6);let a=R(1,6),b=R(1,9);while(gcd(a,b)!==1)b=R(1,9);if(rnd()<.5)b=-b;const M=m===1?'':m;const ans=`${M}x(${poly([[a,'x'],[b,'']])})`;return Q(`Factorise fully: ${HP([[m*a,'x^2'],[m*b,'x']])}`,H(ans),{wrong:[`x(${poly([[m*a,'x'],[m*b,'']])})`,`${M}(${poly([[a,'x^2'],[b,'x']])})`,`${M}x(${poly([[a,'x'],[-b,'']])})`,`${M}x(${poly([[a,'x^2'],[b,'']])})`].filter(s=>s!==ans).map(H),sol:`Both terms contain ${M}x. ${H(ans)}`})}
- const p=R(-9,9)||1,q=R(-9,9)||2;const ans=`(x${sg(p)})(x${sg(q)})`;return Q(`Factorise: ${HP([[1,'x^2'],[p+q,'x'],[p*q,'']])}`,H(ans),{wrong:[`(x${sg(-p)})(x${sg(-q)})`,`(x${sg(p*q)})(x${sg(1)})`,`(x${sg(p+q)})(x${sg(p*q===p+q?1:0)})`.replace(' + 0',''),`(x${sg(p)})(x${sg(-q)})`,`(x${sg(-p)})(x${sg(q)})`].filter(s=>s!==ans&&!s.includes('(x)')).map(H),sol:`Find two numbers that multiply to ${sn(p*q)} and add to ${sn(p+q)}: ${sn(p)} and ${sn(q)}`})});
+ const p=R(-9,9)||1,q=R(-9,9)||2;const ans=`(x${sg(p)})(x${sg(q)})`;return Q(`Factorise: ${HP([[1,'x^2'],[p+q,'x'],[p*q,'']])}`,H(ans),{wrong:[`(x${sg(-p)})(x${sg(-q)})`,`(x${sg(p*q)})(x${sg(1)})`,`(x${sg(p+q)})(x${sg(p*q===p+q?1:0)})`.replace(' + 0',''),`(x${sg(p)})(x${sg(-q)})`,`(x${sg(-p)})(x${sg(q)})`].filter((s,_i,_a,k=s.match(/\([^)]*\)/g).sort().join(''))=>k!==ans.match(/\([^)]*\)/g).sort().join('')&&!s.includes('(x)')).filter((s,i,a)=>a.findIndex(z=>z.match(/\([^)]*\)/g).sort().join('')===s.match(/\([^)]*\)/g).sort().join(''))===i).map(H),sol:`Find two numbers that multiply to ${sn(p*q)} and add to ${sn(p+q)}: ${sn(p)} and ${sn(q)}`})});
 topic('y8eqb',8,'Equations with unknowns on both sides','Get the letter on one side (subtract the smaller letter term), numbers on the other side.',d=>{const x=d===1?R(1,10):R(-8,12)||5;let a=R(3,9),c=R(1,a-1);if(d===3&&rnd()<.5){const b=R(1,6);const e=a*x+a*b-c*x;return Q(`Solve: ${H(`${a}(x + ${b}) = ${c===1?'':c}x${sg(e)}`)}`,x,{allowNeg:true,wrong:[(e-b)/(a-c),(e-a*b)/(a+c),(e-a*b)],sol:`Expand: ${H(`${a}x + ${a*b} = ${c===1?'':c}x${sg(e)}`)}<br>Subtract ${c===1?'':c}x: ${H(`${a-c}x + ${a*b} = ${e}`)}<br>${a*b>0?'Subtract':'Add'} ${a*b}: ${H(`${a-c}x = ${e-a*b}`)}<br>x = ${sn(x)}`})}const b=d===1?R(1,15):R(-12,12)||4;const e=(a-c)*x+b;return Q(`Solve: ${H(`${a}x${sg(b)} = ${c===1?'':c}x${sg(e)}`)}`,x,{allowNeg:true,wrong:[(e-b)/(a+c),(e+b)/(a-c),e-b],sol:`Subtract ${c===1?'':c}x: ${H(`${a-c===1?'':a-c}x${sg(b)} = ${e}`)}<br>${b<0?'Add '+(-b):'Subtract '+b}: ${H(`${a-c===1?'':a-c}x = ${e-b}`)}<br>x = ${sn(x)}`})});
 topic('y8idx',8,'Laws of indices','Multiply → add the powers. Divide → subtract the powers. Power of a power → multiply the powers.',d=>{const v=P(['a','x','y','2','5']);const m=R(2,9),n=R(2,d===3?12:7);const k=R(0,d===1?1:d===2?2:3);
  if(k===0)return Q(`${H(`${v}^${m} × ${v}^${n}`)} = ${v}<sup>?</sup>`,m+n,{wrong:[m*n,Math.abs(m-n),m+n+1],sol:`Add the powers: ${m} + ${n} = ${m+n}`});
@@ -308,7 +322,7 @@ const enabledFor=y=>{const p=prof();const all=topicsFor(y);const e=p.enabled[y];
 const hash=s=>{let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0};
 
 function genQ(id,diff){if(id==='custom'){const c=prof().custom;if(!c.length)return null;const it=P(c);return finalize({q:esc(it.q),a:esc(it.c),wrong:it.w.map(esc),sol:'',topic:'custom'})}
- for(let t=0;t<6;t++){try{const q=T[id].gen(diff);q.topic=id;finalize(q);if(q.opts.length>=2)return q}catch(e){console.warn(id,e)}}return null}
+ let fb=null;for(let t=0;t<6;t++){try{const q=T[id].gen(diff);q.topic=id;finalize(q);if(q.opts.length<2)continue;if(!canCheck())return q;const r=verifyQ(q);if(r.status==='ok'||r.status==='unknown')return q;console.warn('checker rejected a question',id,r,q.q);if(!fb&&applyCheck(q,r)==='fixed')fb=q}catch(e){console.warn(id,e)}}return fb}
 function buildSet(ids,n,diff,seed){const old=rnd;if(seed!==undefined)rnd=mulberry32(seed);const out=[],seen=new Set();try{let pool=[];while(pool.length<n)pool=pool.concat(shuffle(ids));pool=shuffle(pool.slice(0,n));for(const id of pool){let q=null;for(let t=0;t<6;t++){q=genQ(id,diff);if(q&&!seen.has(q.q))break}if(q){seen.add(q.q);out.push(q)}}}finally{rnd=old}return out}
 
 /* ---------- state ---------- */
@@ -321,11 +335,17 @@ let tick=null;function startTimer(){stopTimer();if(S&&S.end&&!S.done)tick=setInt
 function stopTimer(){if(tick){clearInterval(tick);tick=null}}
 const fmtT=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 function choose(k){if(!S||S.done)return;if(S.mode==='instant'&&S.ans[S.i]!==null)return;S.ans[S.i]=k;render()}
-function finish(){if(!S||S.done)return;stopTimer();S.done=true;const p=prof();let score=0;S.qs.forEach((q,i)=>{const ok=S.ans[i]===q.correct;if(ok)score++;if(q.topic){(p.stats[q.topic]=p.stats[q.topic]||[]).push(ok?1:0);p.stats[q.topic]=p.stats[q.topic].slice(-20)}
-  const key=q.q+'|'+q.ans;if(!ok){if(!p.mistakes.some(m=>m.key===key))p.mistakes.push({key,topic:q.topic,q:q.q,opts:q.opts,correct:q.correct,ans:q.ans,sol:q.sol})}else if(S.kind==='mistakes'){p.mistakes=p.mistakes.filter(m=>m.key!==key)}});
- p.mistakes=p.mistakes.slice(-60);const pct=Math.round(score/S.qs.length*100);S.score=score;S.pct=pct;S.passed=pct>=p.pass;S.secs=Math.round((Date.now()-S.t0)/1000);
+function finish(){if(!S||S.done)return;stopTimer();S.done=true;const p=prof();let score=0;S.qs.forEach((q,i)=>{if(q.void)return;const ok=S.ans[i]===q.correct;if(ok)score++;if(q.topic){(p.stats[q.topic]=p.stats[q.topic]||[]).push(ok?1:0);p.stats[q.topic]=p.stats[q.topic].slice(-20)}
+  const key=q.q+'|'+q.ans;if(!ok){if(!p.mistakes.some(m=>m.key===key))p.mistakes.push({key,topic:q.topic,q:q.q,opts:q.opts,correct:q.correct,ans:q.ans,sol:q.sol,unit:q.unit})}else if(S.kind==='mistakes'){p.mistakes=p.mistakes.filter(m=>m.key!==key)}});
+ p.mistakes=p.mistakes.slice(-60);const cnt=S.qs.filter(q=>!q.void).length;const pct=cnt?Math.round(score/cnt*100):0;S.score=score;S.cnt=cnt;S.pct=pct;S.passed=pct>=p.pass;S.secs=Math.round((Date.now()-S.t0)/1000);
  if(S.kind==='numbered'){const y=S.meta.year,n=S.meta.n;p.tests[y]=p.tests[y]||{};const r=p.tests[y][n]||{best:0,att:0};r.best=Math.max(r.best,pct);r.last=pct;r.att++;p.tests[y][n]=r}
- p.hist.push({d:Date.now(),label:S.label,score,total:S.qs.length,pct,year:p.year});p.hist=p.hist.slice(-50);persist();go('results')}
+ p.hist.push({d:Date.now(),label:S.label,score,total:cnt,pct,year:p.year});p.hist=p.hist.slice(-50);persist();go('results')}
+
+// Re-score a finished test after a question on the results page is flagged.
+function rescore(){const p=prof();let score=0;const cnt=S.qs.filter(q=>!q.void).length;S.qs.forEach((q,i)=>{if(!q.void&&S.ans[i]===q.correct)score++});const pct=cnt?Math.round(score/cnt*100):0;S.score=score;S.cnt=cnt;S.pct=pct;S.passed=pct>=p.pass;
+ const h=p.hist[p.hist.length-1];if(h&&h.label===S.label){h.score=score;h.total=cnt;h.pct=pct}
+ if(S.kind==='numbered'){const r=(p.tests[S.meta.year]||{})[S.meta.n];if(r){r.last=pct;r.best=Math.max(r.best,pct)}}
+ S.qs.forEach((q,i)=>{if(q.void||S.ans[i]===q.correct)p.mistakes=p.mistakes.filter(m=>m.q!==q.q)});persist()}
 
 /* ---------- rendering ---------- */
 const TABS=[['home','🏠','Home'],['tests','📝','Tests'],['topics','📚','Topics'],['progress','📈','Progress'],['settings','⚙️','Settings']];
@@ -368,16 +388,16 @@ function vRun(){const q=S.qs[S.i],a=S.ans[S.i],inst=S.mode==='instant',n=S.qs.le
  const conf=ui.confirm==='quit'?`<div class="card"><b>Leave this test?</b><p class="mut sm">Your answers so far won't be saved.</p><div class="row"><button class="btn sec" data-act="cancelc">Keep going</button><button class="btn danger" data-act="quit">Leave</button></div></div>`:ui.confirm==='finish'?`<div class="card"><b>Finish now?</b><p class="mut sm">${n-answered} question${n-answered===1?'':'s'} not answered — they count as wrong.</p><div class="row"><button class="btn sec" data-act="cancelc">Go back</button><button class="btn" data-act="finishnow">Finish</button></div></div>`:'';
  return `<div class="qhead"><button class="pill" data-act="askquit">✕</button><span class="n">${S.i+1} / ${n}</span><span class="tp">${esc(S.label)}${t?' · '+t.name:''}</span>${S.end?`<span class="timer" id="tmr">${fmtT(S.end-Date.now())}</span>`:''}</div>
  <div class="bar" style="margin-bottom:14px"><i style="width:${(inst?S.ans.filter(x=>x!==null).length:S.i+1)/n*100}%"></i></div>
- ${conf}<div class="card"><div class="qtext">${q.q}</div>${opts}${fb}<div id="hint"></div>${nav}</div>
+ ${conf}<div class="card"><div class="qtext">${q.q}</div>${opts}${flagBox(q,show)}${fb}<div id="hint"></div>${nav}${q.flag?'':'<div class="sp"></div><button class="btn ghost" data-act="flag">🚩 Flag / Recheck!</button>'}</div>
  ${inst?'':`<div class="card"><div class="mut sm">Jump to a question (${answered}/${n} answered)</div>${dots}${!last?`<div class="sp"></div><button class="btn ghost" data-act="finish">Finish test</button>`:''}</div>`}`}
-function vResults(){const p=prof();const r=S;const byT={};r.qs.forEach((q,i)=>{const k=q.topic;byT[k]=byT[k]||[0,0];byT[k][1]++;if(r.ans[i]===q.correct)byT[k][0]++});
+function vResults(){const p=prof();const r=S;const byT={};r.qs.forEach((q,i)=>{if(q.void)return;const k=q.topic;byT[k]=byT[k]||[0,0];byT[k][1]++;if(r.ans[i]===q.correct)byT[k][0]++});
  const list=r.qs.map((q,i)=>({q,i,ok:r.ans[i]===q.correct})).filter(x=>!ui.reviewWrongOnly||!x.ok);
  return `<header class="top"><h1>${esc(r.label)}</h1></header>
- <div class="banner ${r.passed?'pass':'fail'}"><div class="sc">${r.score} / ${r.qs.length}</div><div class="vd">${r.passed?'PASS':'NOT YET'} · ${r.pct}%</div><div class="mut sm" style="margin-top:6px">Pass mark ${p.pass}% · time ${fmtT(r.secs*1000)}</div></div>
+ <div class="banner ${r.passed?'pass':'fail'}"><div class="sc">${r.score} / ${r.cnt??r.qs.length}</div><div class="vd">${r.passed?'PASS':'NOT YET'} · ${r.pct}%</div><div class="mut sm" style="margin-top:6px">Pass mark ${p.pass}% · time ${fmtT(r.secs*1000)}</div></div>
  <div class="row" style="margin-bottom:12px"><button class="btn sec" data-act="again">Retake</button><button class="btn" data-go="home">Done</button></div>
  <div class="card"><h2>By topic</h2>${Object.entries(byT).map(([k,[c,t]])=>`<div class="trow"><span class="nm">${T[k]?T[k].name:'Question'}</span><b>${c}/${t}</b><span class="face">${face(c/t)}</span></div>`).join('')}</div>
  <div class="card"><div class="row" style="align-items:center"><h2>Review answers</h2><label class="sm" style="flex:0 0 auto;display:flex;gap:6px;align-items:center"><input type="checkbox" data-act="wrongonly" ${ui.reviewWrongOnly?'checked':''}>Wrong only</label></div>
- ${list.length?list.map(({q,i,ok})=>`<div class="rv"><div><span class="tag ${ok?'ok':'no'}">Q${i+1} ${ok?'✓':'✗'}</span></div><div class="qq">${q.q}</div><div class="sm">${r.ans[i]===null?'<span class="mut">Not answered</span>':ok?'':'Your answer: <b>'+q.opts[r.ans[i]]+'</b><br>'}Correct: <b>${q.ans}</b></div>${q.sol?`<div class="sm mut" style="margin-top:4px">${q.sol}</div>`:''}</div>`).join(''):'<p class="mut">All correct — nothing to review! 🎉</p>'}</div>`}
+ ${list.length?list.map(({q,i,ok})=>`<div class="rv"><div><span class="tag ${q.void?'':ok?'ok':'no'}">Q${i+1} ${q.void?'not counted':ok?'✓':'✗'}</span>${q.flag?'':`<button class="lnk sm" style="float:right" data-flagr="${i}">🚩 Flag / Recheck</button>`}</div><div class="qq">${q.q}</div><div class="sm">${r.ans[i]===null?'<span class="mut">Not answered</span>':ok?'':'Your answer: <b>'+q.opts[r.ans[i]]+'</b><br>'}Correct: <b>${q.ans}</b></div>${q.sol?`<div class="sm mut" style="margin-top:4px">${q.sol}</div>`:''}${flagBox(q,true)}</div>`).join(''):'<p class="mut">All correct — nothing to review! 🎉</p>'}</div>`}
 function vProgress(){const p=prof();const ids=Object.keys(p.stats).filter(id=>T[id]&&p.stats[id].length).sort((a,b)=>acc(a)-acc(b));const h=p.hist.slice(-10).reverse();
  return header('Progress')+`<div class="card"><h2>Topics</h2><p class="mut sm" style="margin:2px 0 6px">Weakest first. Based on the last 20 answers per topic.</p>${ids.length?ids.map(id=>{const a=acc(id);return `<div class="trow"><span class="nm">${T[id].name}<small>Year ${T[id].y||'—'} · ${p.stats[id].length} answers</small><div class="bar" style="margin-top:6px;height:7px"><i style="width:${Math.round(a*100)}%;background:${a>=.8?'var(--ok)':a>=.5?'var(--amb)':'var(--bad)'}"></i></div></span><b>${Math.round(a*100)}%</b><span class="face">${face(a)}</span></div>`}).join('')+`<div class="sp"></div><button class="btn" data-act="weakest">Test my 3 weakest topics</button>`:'<p class="mut">No answers yet. Take a test to start tracking.</p>'}</div>
  <div class="card"><h2>Recent tests</h2>${h.length?h.map(x=>`<div class="trow"><span class="nm">${esc(x.label)}<small>${new Date(x.d).toLocaleDateString('en-GB',{day:'numeric',month:'short'})} · Year ${x.year}</small></span><b style="color:${x.pct>=p.pass?'var(--ok)':'var(--bad)'}">${x.score}/${x.total}</b></div>`).join(''):'<p class="mut">None yet.</p>'}</div>
@@ -392,15 +412,18 @@ function vSettings(){const p=prof();const seg=(key,vals,lab)=>`<div class="seg">
  <div class="card"><h2>Topics in Year ${y} tests</h2><p class="mut sm" style="margin:2px 0 4px">Untick topics your child hasn't covered yet. Numbered tests are rebuilt from the ticked topics.</p>${topicsFor(y).map(id=>`<label class="trow"><input type="checkbox" data-en="${id}" ${en.has(id)?'checked':''}><span class="nm">${T[id].name}</span></label>`).join('')}${p.custom.length?`<label class="trow"><input type="checkbox" data-en="custom" ${(p.enabled[y]||[]).includes('custom')?'checked':''}><span class="nm">My own questions</span></label>`:''}</div>
  <div class="card"><h2>Quick tests</h2>${p.sets.length?p.sets.map((s,i)=>`<div class="trow"><span class="nm">${esc(s.name)}<small>${s.topics.map(id=>T[id]?T[id].name:'').filter(Boolean).join(', ')}</small></span><button class="lnk" data-delset="${i}">Remove</button></div>`).join(''):'<p class="mut sm">None. Create them on the Topics tab.</p>'}</div>
  <div class="card"><h2>My own questions</h2><p class="mut sm" style="margin:2px 0 8px">One per line: <b>question | correct answer | wrong | wrong | wrong</b><br>e.g. <code>7 × 8 = ? | 56 | 54 | 48 | 63</code></p><textarea id="cq" placeholder="What is 15% of 60? | 9 | 6 | 15 | 12">${esc(p.custom.map(c=>[c.q,c.c,...c.w].join(' | ')).join('\n'))}</textarea><div class="sp"></div><button class="btn sec" data-act="savecq">Save questions</button></div>
- <div class="card"><h2>Backup</h2><p class="mut sm" style="margin:2px 0 8px">Progress is kept on this device only. Copy a backup to move it to another phone.</p><button class="btn sec" data-act="copyb">Copy backup</button><div class="sp"></div><textarea id="rb" style="min-height:70px" placeholder="Paste a backup here to restore"></textarea><div class="sp"></div><button class="btn ghost" data-act="restore">Restore</button></div>
+ ${vFlags()}<div class="card"><h2>Backup</h2><p class="mut sm" style="margin:2px 0 8px">Progress is kept on this device only. Copy a backup to move it to another phone.</p><button class="btn sec" data-act="copyb">Copy backup</button><div class="sp"></div><textarea id="rb" style="min-height:70px" placeholder="Paste a backup here to restore"></textarea><div class="sp"></div><button class="btn ghost" data-act="restore">Restore</button></div>
  <div class="card"><h2>Install on a phone</h2><p class="sm"><b>iPhone / iPad:</b> open in Safari → Share → <i>Add to Home Screen</i>.<br><b>Android:</b> open in Chrome → ⋮ menu → <i>Install app</i> or <i>Add to Home screen</i>.</p></div>`}
 
 /* ---------- events ---------- */
+function vFlags(){const f=(store.flags||[]).slice().reverse();const ic={ok:'🔍',fixed:'✅',void:'🤔'};
+ return `<div class="card"><h2>Flagged questions</h2><p class="mut sm" style="margin:2px 0 8px">Questions flagged with 🚩. ✅ corrected automatically · 🔍 checked, the answer was right · 🤔 couldn't be checked (not counted in the score).</p>${f.length?f.slice(0,20).map(x=>`<div class="rv sm"><div>${ic[x.res]||''} <b>${esc(x.q)}</b></div><div class="mut">${new Date(x.d).toLocaleDateString('en-GB')} · ${x.res==='fixed'?'was '+esc(x.was)+' → now '+esc(x.now):'answer '+esc(x.now)}</div></div>`).join('')+`<div class="sp"></div><div class="row"><button class="btn sec" data-act="copyflags">Copy report</button><button class="btn ghost" data-act="clearflags">Clear</button></div>`:'<p class="mut sm">Nothing flagged yet.</p>'}</div>`}
 let toastT;function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:800;z-index:9;max-width:90%;text-align:center';document.body.appendChild(t)}t.textContent=m;t.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>t.style.display='none',2200)}
 function testLabel(n){return `Year ${prof().year} · Test ${n}`}
 function runNumbered(n){const p=prof(),y=p.year,ids=enabledFor(y);const seed=hash(`${y}|${n}|${p.diff}|${p.count}|${ids.join(',')}`);startTest('numbered',buildSet(ids,p.count,p.diff,seed),testLabel(n),{year:y,n})}
 function runRandom(ids,label){const p=prof();startTest('random',buildSet(ids,p.count,p.diff),label,{ids})}
-document.addEventListener('click',e=>{const b=e.target.closest('[data-go],[data-act],[data-year],[data-opt],[data-jump],[data-set],[data-pick],[data-setk],[data-en],[data-prof],[data-delset]');if(!b)return;const p=prof();const d=b.dataset;
+document.addEventListener('click',e=>{const b=e.target.closest('[data-flagr],[data-go],[data-act],[data-year],[data-opt],[data-jump],[data-set],[data-pick],[data-setk],[data-en],[data-prof],[data-delset]');if(!b)return;const p=prof();const d=b.dataset;
+ if(d.flagr!==undefined){const k=flagQ(S.qs[+d.flagr]);rescore();toast(k==='fixed'?'Corrected, thank you!':k==='ok'?'Checked: the answer was right':'Not counted in the score');render();return}
  if(d.go){ui.confirm=null;go(d.go);return}
  if(d.year){p.year=+d.year;persist();render();return}
  if(d.opt!==undefined){choose(+d.opt);return}
@@ -421,6 +444,9 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go],[data-
   case 'saveset':{const nm=($('#setname').value||'').trim()||'My quick test';p.sets.push({name:nm,topics:[...ui.pick]});ui.setName=null;persist();toast('Saved to Home → Quick tests');render();break}
   case 'weakest':{const ids=Object.keys(p.stats).filter(id=>T[id]&&p.stats[id].length).sort((a,b)=>acc(a)-acc(b)).slice(0,3);runRandom(ids,'Weakest topics');break}
   case 'hint':{const t=T[S.qs[S.i].topic];$('#hint').innerHTML=`<div class="fb" style="background:var(--ambbg)">💡 ${t&&t.hint?t.hint:'Read the question carefully and rule out answers that are clearly wrong.'}</div>`;break}
+  case 'flag':{const k=flagQ(S.qs[S.i]);toast(k==='fixed'?'Corrected, thank you!':k==='ok'?'Checked: the question is right':'Not counted in the score');render();break}
+  case 'copyflags':{const txt=(store.flags||[]).map(x=>`${new Date(x.d).toISOString().slice(0,10)} [${x.topic}] ${x.res.toUpperCase()}: ${x.q} | options: ${x.opts.join(' ; ')} | marked: ${x.was} | now: ${x.now}`).join('\n');try{navigator.clipboard.writeText(txt).then(()=>toast('Report copied'),()=>{$('#rb').value=txt;toast('Copy the text in the Backup box')})}catch(err){$('#rb').value=txt;toast('Copy the text in the Backup box')}break}
+  case 'clearflags':store.flags=[];persist();render();break;
   case 'nextq':if(S.i<S.qs.length-1){S.i++;render();window.scrollTo(0,0)}else finish();break;
   case 'prevq':if(S.i>0){S.i--;render()}break;
   case 'finish':{const un=S.ans.filter(x=>x===null).length;if(un){ui.confirm='finish';render()}else finish();break}
@@ -441,6 +467,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-go],[data-
  }});
 document.addEventListener('change',e=>{if(e.target.id==='pname'){prof().name=e.target.value.trim()||'Learner';persist();render()}});
 document.addEventListener('keydown',e=>{if(view!=='run'||!S||S.done)return;const k='abcd1234'.indexOf(e.key.toLowerCase());if(k>=0){choose(k%4)}else if(e.key==='Enter'){const nb=document.querySelector('[data-act="nextq"],[data-act="finish"]');nb&&nb.click()}});
+try{if(canCheck()){for(const pr of store.profiles)pr.mistakes=(pr.mistakes||[]).filter(m=>{const r=verifyQ(m);return r.status==='ok'||r.status==='unknown'||applyCheck(m,r)==='fixed'});persist()}}catch(e){console.warn(e)}
 render();
 try{if('serviceWorker' in navigator&&location.protocol==='https:'&&!/claude|anthropic/.test(location.hostname))navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}
 </script>
