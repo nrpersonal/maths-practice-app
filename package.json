@@ -1,0 +1,10 @@
+{
+  "name": "maths-practice-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "sync": "npx cap sync",
+    "ios": "npx cap open ios",
+    "android": "npx cap open android"
+  }
+}

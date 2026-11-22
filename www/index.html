@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Maths Practice Tests</title>
+<meta name="theme-color" content="#2f4ac0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Maths Tests">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f5fb;--card:#fff;--ink:#1c2233;--mut:#687089;--pri:#2f4ac0;--pri2:#e6ebff;--ok:#1f8a3b;--okbg:#e3f5e8;--bad:#d52f2f;--badbg:#fde7e7;--amb:#c77700;--ambbg:#fff3dc;--line:#e1e5ef;--sh:0 1px 2px rgba(20,30,60,.06),0 4px 14px rgba(20,30,60,.06)}
+@media (prefers-color-scheme:dark){:root{--bg:#11141c;--card:#1b2030;--ink:#eef1f8;--mut:#9aa3ba;--pri:#7f97ff;--pri2:#262f52;--ok:#4cc46d;--okbg:#18301f;--bad:#ff6b6b;--badbg:#3a1d1f;--amb:#ffb648;--ambbg:#3a2c12;--line:#2b3247;--sh:none}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:17px}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) calc(76px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
+.wrap{max-width:620px;margin:0 auto;padding:12px 14px 24px}
+header.top{display:flex;align-items:center;gap:10px;padding:6px 2px 12px}
+header.top h1{font-size:21px;margin:0;font-weight:900;flex:1;letter-spacing:-.2px}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--pri2);color:var(--pri);font-weight:800;border-radius:999px;padding:6px 12px;font-size:14px;border:0;cursor:pointer}
+.card{background:var(--card);border-radius:18px;padding:16px;margin:0 0 12px;box-shadow:var(--sh);border:1px solid var(--line)}
+.card h2{margin:0 0 4px;font-size:18px;font-weight:900}
+.card h3{margin:14px 0 8px;font-size:15px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.5px}
+.mut{color:var(--mut)}.sm{font-size:14px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:14px 16px;font:inherit;font-weight:800;font-size:17px;cursor:pointer;background:var(--pri);color:#fff}
+.btn.sec{background:var(--pri2);color:var(--pri)}
+.btn.ghost{background:transparent;color:var(--pri);border:1.5px solid var(--line)}
+.btn.danger{background:var(--badbg);color:var(--bad)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{flex:1;min-width:44px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 6px;font:inherit;font-weight:800;cursor:pointer}
+.seg button.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.big{display:flex;align-items:center;gap:14px;cursor:pointer}
+.big .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:var(--pri2);flex:none}
+.big .tx{flex:1}.big .tx b{display:block;font-size:17px}.big .tx span{font-size:14px;color:var(--mut)}
+.big .ch{color:var(--mut);font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tile{border-radius:14px;padding:12px 4px;text-align:center;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font:inherit;color:var(--ink)}
+.tile b{display:block;font-size:13px;color:var(--mut);font-weight:800}
+.tile span{display:block;font-size:20px;font-weight:900;margin-top:2px}
+.tile.pass{background:var(--okbg);border-color:transparent}.tile.pass span{color:var(--ok)}
+.tile.fail{background:var(--badbg);border-color:transparent}.tile.fail span{color:var(--bad)}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;background:var(--pri);border-radius:99px;transition:width .3s}
+.trow{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:0}
+.trow .nm{flex:1;font-weight:700}.trow .nm small{display:block;color:var(--mut);font-weight:600;font-size:13px}
+.face{font-size:22px;width:30px;text-align:center}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--pri)}
+input[type=text],textarea,select{width:100%;font:inherit;padding:11px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+textarea{min-height:150px;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:0;background:var(--pri2);color:var(--pri);border-radius:999px;padding:9px 14px;font:inherit;font-weight:800;font-size:15px;cursor:pointer}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav.tabs button{flex:1;max-width:124px;border:0;background:none;color:var(--mut);font:inherit;font-size:12px;font-weight:800;padding:4px 0;cursor:pointer}
+nav.tabs button i{display:block;font-style:normal;font-size:22px;line-height:1.2}
+nav.tabs button.on{color:var(--pri)}
+/* test runner */
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.qhead .n{font-weight:900}.qhead .tp{flex:1;color:var(--mut);font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.timer{font-weight:900;font-variant-numeric:tabular-nums;background:var(--pri2);color:var(--pri);padding:4px 10px;border-radius:99px;font-size:14px}
+.timer.low{background:var(--badbg);color:var(--bad)}
+.qtext{font-size:23px;font-weight:800;line-height:1.45;margin:6px 0 16px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:13px 14px;margin:0 0 10px;font:inherit;font-size:19px;font-weight:700;cursor:pointer}
+.opt .L{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--pri2);color:var(--pri);font-weight:900;font-size:15px;flex:none}
+.opt.sel{border-color:var(--pri)}.opt.sel .L{background:var(--pri);color:#fff}
+.opt.right{border-color:var(--ok);background:var(--okbg)}.opt.right .L{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--badbg)}.opt.wrong .L{background:var(--bad);color:#fff}
+.opt:disabled{cursor:default;color:var(--ink)}
+.fb{border-radius:14px;padding:12px 14px;margin:4px 0 12px;font-size:16px;line-height:1.5}
+.fb.ok{background:var(--okbg)}.fb.no{background:var(--badbg)}
+.fb b.h{display:block;font-size:17px;margin-bottom:2px}
+.dots{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.dots button{width:34px;height:34px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:800;font-size:13px;cursor:pointer}
+.dots button.a{background:var(--pri2);border-color:transparent;color:var(--pri)}
+.dots button.cur{border-color:var(--pri)}
+.dots button.r{background:var(--okbg);color:var(--ok);border-color:transparent}
+.dots button.w{background:var(--badbg);color:var(--bad);border-color:transparent}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05;margin:0 2px;font-size:.92em}
+.fr>span:last-child{border-top:2px solid currentColor;padding-top:1px;min-width:.9em;text-align:center}
+sup{font-size:.65em}
+.banner{text-align:center;padding:22px 16px;border-radius:18px;margin-bottom:12px}
+.banner.pass{background:var(--okbg)}.banner.fail{background:var(--badbg)}
+.banner .sc{font-size:44px;font-weight:900;line-height:1.1}
+.banner .vd{font-size:20px;font-weight:900;margin-top:4px}
+.banner.pass .vd{color:var(--ok)}.banner.fail .vd{color:var(--bad)}
+.rv{padding:12px 0;border-bottom:1px solid var(--line)}.rv:last-child{border-bottom:0}
+.rv .qq{font-weight:800;margin-bottom:4px}
+.tag{display:inline-block;font-size:12px;font-weight:800;padding:2px 8px;border-radius:99px;background:var(--pri2);color:var(--pri);margin-right:6px}
+.tag.ok{background:var(--okbg);color:var(--ok)}.tag.no{background:var(--badbg);color:var(--bad)}
+.note{background:var(--ambbg);border-radius:12px;padding:10px 12px;font-size:14px}
+.sp{height:10px}
+.lnk{background:none;border:0;color:var(--pri);font:inherit;font-weight:800;cursor:pointer;padding:0}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<nav class="tabs" id="tabs"></nav>
+<script>
+"use strict";
+// ==GEN START==
+/* ---------- random (seedable so numbered tests stay the same) ---------- */
+let rnd=Math.random;
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=(a,b)=>Math.floor(rnd()*(b-a+1))+a;
+const P=a=>a[Math.floor(rnd()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const fx=n=>+(+n).toPrecision(12);
+const decs=n=>{const s=String(fx(n));if(s.includes('e'))return 0;return(s.split('.')[1]||'').length};
+const nf=n=>{n=fx(n);return n.toLocaleString('en-GB',{maximumFractionDigits:12}).replace('-','−')};
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a};
+const lcm=(a,b)=>a/gcd(a,b)*b;
+const F=(n,d)=>`<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+function fs(n,d){if(d<0){n=-n;d=-d}const g=gcd(n,d)||1;n/=g;d/=g;if(d===1)return nf(n);return (n<0?'−':'')+F(Math.abs(n),d)}
+const H=s=>String(s).replace(/-/g,'−').replace(/\*/g,'×').replace(/\^(−?\d+)/g,'<sup>$1</sup>');
+const sg=b=>b<0?` - ${-b}`:` + ${b}`;
+const pn=n=>n<0?`(−${-n})`:`${n}`;
+const sn=n=>n<0?`−${-n}`:`${n}`;
+function term(c,v,first){if(c===0)return'';const a=Math.abs(c);const body=v?(a===1?'':a)+v:''+a;return first?(c<0?'-':'')+body:(c<0?' - ':' + ')+body}
+function poly(ts){let s='',f=true;for(const[c,v]of ts){if(!c)continue;s+=term(c,v,f);f=false}return s||'0'}
+const HP=ts=>H(poly(ts));
+// wrong versions of a polynomial answer (coefficient slips, sign slips)
+function polyAlts(ts,n=3,extra=[]){const out=[],seen=new Set([poly(ts)]);const add=t=>{const s=poly(t);if(!seen.has(s)&&s!=='0'){seen.add(s);out.push(H(s))}};extra.forEach(add);let g=0;
+ while(out.length<n+2&&g++<60){const t=ts.map(x=>x.slice());const i=R(0,t.length-1);const k=R(0,4);
+  if(k===0)t[i][0]=-t[i][0];else if(k===1)t[i][0]+=1;else if(k===2)t[i][0]-=1;else if(k===3)t[i][0]+=R(2,4)*(rnd()<.5?1:-1);else{const j=R(0,t.length-1);t[i][0]=-t[i][0];t[j][0]+= (i===j?0:1)}
+  add(t)}return out}
+const ord=k=>['','1st','2nd','3rd'][k]||k+'th';
+function roman(n){const m=[[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];let s='';for(const[v,r]of m)while(n>=v){s+=r;n-=v}return s}
+const isPrime=n=>{if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true};
+
+function Q(q,a,o={}){return Object.assign({q,a},o)}
+function numWrongs(a,given,q){const out=[],seen=new Set([fx(a)]);const neg=q.allowNeg||a<0;
+ const add=v=>{v=fx(v);if(!isFinite(v)||seen.has(v)||(!neg&&v<0)||(q.intOnly&&v!==Math.round(v))||(Number.isInteger(a)&&decs(v)>2))return;seen.add(v);out.push(v)};
+ given.forEach(add);const gl=Math.min(out.length,3);
+ const dp=decs(a),m=Math.abs(a);const u=dp?10**-dp:(m>=1000?P([1,10]):1);
+ const c=shuffle([a+u,a-u,a+2*u,a-2*u,a*10,a/10,a+10*u,a-10*u,a+u*R(3,9),a-u*R(3,9),-a]);
+ for(const v of c){if(out.length>=8)break;add(v)}
+ let g=0;while(out.length<3&&g++<80)add(a+u*R(-25,25));
+ return out.slice(0,gl).concat(shuffle(out.slice(gl))).slice(0,3)}
+function finalize(q){let correct,wrongs;
+ if(q.choices){correct=q.a;wrongs=q.choices.filter(c=>c!==q.a)}
+ else if(typeof q.a==='number'){correct=nf(q.a);wrongs=numWrongs(q.a,q.wrong||[],q).map(nf)}
+ else{correct=q.a;wrongs=q.wrong||[]}
+ const k=s=>String(s).replace(/<[^>]+>/g,'|').replace(/\s/g,'');
+ const seen=new Set([k(correct)]),w=[];for(const x of wrongs){const kk=k(x);if(!seen.has(kk)){seen.add(kk);w.push(x)}if(w.length===3)break}
+ const u=q.unit?' '+q.unit:'';
+ const all=q.choices?[correct,...w]:shuffle([correct,...w]);
+ q.opts=all.map(x=>x+u);q.correct=all.indexOf(correct);q.ans=correct+u;return q}
+
+/* ---------- topics ---------- */
+const T={};const ORDER=[];
+function topic(id,y,name,hint,gen){T[id]={id,y,name,hint,gen};ORDER.push(id)}
+const topicsFor=y=>ORDER.filter(id=>T[id].y===y);
+
+/* Year 1 */
+topic('y1bond',1,'Number bonds to 10 and 20','What do you add to get to the total?',d=>{const t=d<3?10:20,a=R(0,t);return Q(`${a} + ? = ${t}`,t-a,{wrong:[t+a,t-a+1,t-a-1],sol:`${t} − ${a} = ${t-a}`})});
+topic('y1add',1,'Adding within 20','Start with the bigger number and count on.',d=>{const m=d===1?10:20,a=R(1,m-1),b=R(1,m-a);return Q(`${a} + ${b} = ?`,a+b,{wrong:[a+b-1,a+b+1,Math.abs(a-b)],sol:`Start at ${Math.max(a,b)} and count on ${Math.min(a,b)}: ${a+b}`})});
+topic('y1sub',1,'Subtracting within 20','Count back from the first number.',d=>{const m=d===1?10:20,a=R(3,m),b=R(1,a-1);return Q(`${a} − ${b} = ?`,a-b,{wrong:[a+b,a-b+1,a-b-1],sol:`Count back ${b} from ${a}: ${a-b}`})});
+topic('y1dbl',1,'Doubling and halving','Double = add it to itself. Half = share into 2 equal groups.',d=>{const n=R(1,d===1?10:d===2?20:50);return rnd()<.5?Q(`Double ${n} = ?`,2*n,{wrong:[n+2,n,2*n+2],sol:`${n} + ${n} = ${2*n}`}):Q(`Half of ${2*n} = ?`,n,{wrong:[2*n-2,n+2,4*n],sol:`${2*n} shared into 2 equal groups is ${n} each`})});
+topic('y1count',1,'Counting in 2s, 5s and 10s','Find the jump between the numbers.',d=>{const s=P([2,5,10]),st=s*R(0,d===1?5:12),back=d===3&&rnd()<.5;const seq=back?[st+3*s,st+2*s,st+s]:[st,st+s,st+2*s];const nx=back?st:st+3*s;return Q(`What comes next?<br>${seq.join(', ')}, ?`,nx,{wrong:[back?nx-1:nx+1,back?nx+s*2:nx-s,back?nx+2:nx+s],sol:`The numbers go ${back?'down':'up'} in ${s}s, so next is ${nx}`})});
+topic('y1more',1,'One more, one less, ten more','One more = add 1. Ten more = add 10.',d=>{const n=R(10,d===1?20:100);const v=P([[1,'one more than'],[-1,'one less than'],[10,'ten more than'],[-10,'ten less than']]);return Q(`What is ${v[1]} ${n}?`,n+v[0],{wrong:[n-v[0],n+(Math.abs(v[0])===1?10:1)*Math.sign(v[0]),n],sol:`${n} ${v[0]>0?'+':'−'} ${Math.abs(v[0])} = ${n+v[0]}`})});
+
+/* Year 2 */
+topic('y2add',2,'Adding 2-digit numbers','Add the tens, then add the ones.',d=>{let a,b;if(d===1){a=R(10,89);b=R(2,9)}else if(d===2){a=R(10,60);b=R(11,99-a)}else{a=R(20,99);b=R(20,99)}const t=Math.floor(b/10)*10,o=b%10;return Q(`${a} + ${b} = ?`,a+b,{wrong:[a+b-10,a+b+10,a+b+1],sol:t?`${a} + ${t} = ${a+t}, then + ${o} = ${a+b}`:`Count on ${b} from ${a}: ${a+b}`})});
+topic('y2sub',2,'Subtracting 2-digit numbers','Take away the tens, then the ones.',d=>{let a,b;if(d===1){a=R(20,99);b=R(2,9)}else if(d===2){a=R(40,99);b=R(11,a-10)}else{a=R(100,199);b=R(21,99)}const t=Math.floor(b/10)*10,o=b%10;return Q(`${a} − ${b} = ?`,a-b,{wrong:[a-b+10,a-b-10,a-b+1],sol:t?`${a} − ${t} = ${a-t}, then − ${o} = ${a-b}`:`Count back ${b}: ${a-b}`})});
+topic('y2tab',2,'2, 5 and 10 times tables','Count in 2s, 5s or 10s.',d=>{const t=P([2,5,10]),n=R(1,12);return rnd()<(d===1?.8:.5)?Q(`${n} × ${t} = ?`,n*t,{wrong:[n*t+t,n*t-t,n+t],sol:`${n} lots of ${t} = ${n*t}`}):Q(`${n*t} ÷ ${t} = ?`,n,{wrong:[n+1,n-1,n*t-t],sol:`${n} × ${t} = ${n*t}, so ${n*t} ÷ ${t} = ${n}`})});
+topic('y2pv',2,'Place value','Tens are worth 10, ones are worth 1, hundreds are worth 100.',d=>{if(d===3){const h=R(1,9),t=R(0,9),o=R(0,9);return Q(`What is ${h} hundreds, ${t} tens and ${o} ones?`,h*100+t*10+o,{wrong:[h*100+o*10+t,h+t+o,h*10+t*100+o],sol:`${h*100} + ${t*10} + ${o} = ${h*100+t*10+o}`})}const t=R(1,9),o=R(0,9),n=t*10+o;return rnd()<.5?Q(`What is ${t} tens and ${o} ones?`,n,{wrong:[o*10+t,t+o,t*100+o],sol:`${t*10} + ${o} = ${n}`}):Q(`What is the value of the digit ${t} in ${n}?`,t*10,{wrong:[t,t*100,o],sol:`${t} is in the tens column, so it is worth ${t*10}`})});
+topic('y2frac',2,'Halves, quarters and thirds','Half: share into 2. Quarter: share into 4. Third: share into 3.',d=>{const fl=d===1?[[1,2]]:d===2?[[1,2],[1,4],[1,3]]:[[1,2],[1,4],[1,3],[3,4],[2,3]];const[n,de]=P(fl),k=R(1,d===1?10:8),amt=de*k;return Q(`What is ${F(n,de)} of ${amt}?`,n*k,{wrong:[amt-n*k,k*2,amt/2],sol:`${amt} ÷ ${de} = ${k}${n>1?`, then × ${n} = ${n*k}`:''}`})});
+topic('y2money',2,'Money','100p = £1. Find change by counting up.',d=>{if(d===1){const a=P([1,2,5,10,20]),b=P([1,2,5,10,20,50]);return Q(`A ${a}p coin and a ${b}p coin. How much altogether?`,a+b,{unit:'p',sol:`${a} + ${b} = ${a+b}p`})}const pay=d===2?50:100,c=R(5,pay-1);return Q(`You pay ${pay===100?'£1':'50p'} for something that costs ${c}p. How much change?`,pay-c,{unit:'p',wrong:[pay-c+10,c,pay-c-1],sol:`${pay} − ${c} = ${pay-c}p`})});
+
+/* Year 3 */
+topic('y3add',3,'Adding 3-digit numbers','Line up the columns. Carry when a column makes 10 or more.',d=>{const a=R(100,899),b=d===1?R(1,9)*10:d===2?R(11,99):R(100,899);return Q(`${a} + ${b} = ?`,a+b,{wrong:[a+b-10,a+b+100,a+b-100,a+b+10],sol:`Add ones, then tens, then hundreds: ${a} + ${b} = ${a+b}`})});
+topic('y3sub',3,'Subtracting 3-digit numbers','Line up the columns. Exchange from the next column if needed.',d=>{const a=R(200,999),b=d===1?R(1,9)*10:d===2?R(11,99):R(100,a-50);return Q(`${a} − ${b} = ?`,a-b,{wrong:[a-b+10,a-b-10,a-b+100],sol:`${a} − ${b} = ${a-b}. Check: ${a-b} + ${b} = ${a}`})});
+topic('y3tab',3,'3, 4 and 8 times tables','The 8 times table is double the 4 times table.',d=>{const t=P([3,4,8]),n=R(2,12);return rnd()<.55?Q(`${n} × ${t} = ?`,n*t,{wrong:[n*t+t,n*t-t,n*(t===8?4:t+1)],sol:`${n} × ${t} = ${n*t}`}):Q(`${n*t} ÷ ${t} = ?`,n,{wrong:[n+1,n-1,n+2],sol:`${n} × ${t} = ${n*t}, so the answer is ${n}`})});
+topic('y3fam',3,'Fractions of amounts','Divide by the bottom number, multiply by the top number.',d=>{const de=P([2,3,4,5,8,10]),n=d===1?1:R(1,de-1),k=R(2,d===3?12:10),amt=de*k;return Q(`What is ${F(n,de)} of ${amt}?`,n*k,{wrong:[k,amt-n*k,amt*n,amt/n],sol:`${amt} ÷ ${de} = ${k}${n>1?`, then ${k} × ${n} = ${n*k}`:''}`})});
+topic('y3perim',3,'Perimeter','Perimeter is the distance all the way round. Add every side.',d=>{const l=R(3,d===1?10:20),w=R(2,l-1);if(d===3&&rnd()<.5){const p=2*(l+w);return Q(`A rectangle has perimeter ${p} cm and length ${l} cm. How wide is it?`,w,{unit:'cm',wrong:[p-l,p/2,p-2*l],sol:`${p} − ${l} − ${l} = ${p-2*l}, then ÷ 2 = ${w} cm`})}return Q(`A rectangle is ${l} cm long and ${w} cm wide. What is its perimeter?`,2*(l+w),{unit:'cm',wrong:[l+w,l*w,2*l+w],sol:`${l} + ${w} + ${l} + ${w} = ${2*(l+w)} cm`})});
+topic('y3meas',3,'Measures (m, cm, kg, g, l, ml)','1 m = 100 cm, 1 kg = 1000 g, 1 l = 1000 ml, 1 cm = 10 mm.',d=>{const[b,s,f]=P([['m','cm',100],['kg','g',1000],['l','ml',1000],['cm','mm',10]]);const v=R(1,9);if(d===1)return Q(`${v} ${b} = ? ${s}`,v*f,{wrong:[v*f/10,v*f*10,v+f],sol:`1 ${b} = ${f} ${s}, so ${v} × ${f} = ${v*f} ${s}`});if(d===2)return Q(`${v*f} ${s} = ? ${b}`,v,{wrong:[v*10,v*f/10,v*100],sol:`Divide by ${f}: ${v*f} ÷ ${f} = ${v} ${b}`});const x=R(1,f-1);return Q(`${v} ${b} ${x} ${s} = ? ${s}`,v*f+x,{wrong:[v*10+x,v+x,v*f*10+x],sol:`${v} ${b} = ${v*f} ${s}, plus ${x} = ${v*f+x} ${s}`})});
+topic('y3time',3,'Time','60 seconds = 1 minute, 60 minutes = 1 hour, 24 hours = 1 day.',d=>{const k=R(0,d===1?1:3);if(k===0){const h=R(1,5);return Q(`How many minutes are in ${h} hour${h>1?'s':''}?`,h*60,{wrong:[h*100,h*30,h*60+60],sol:`${h} × 60 = ${h*60} minutes`})}if(k===1){const h=R(1,3),m=P([5,10,15,20,30,45]);return Q(`How many minutes are in ${h} hour${h>1?'s':''} ${m} minutes?`,h*60+m,{wrong:[h*100+m,h+m,h*60],sol:`${h} × 60 = ${h*60}, + ${m} = ${h*60+m} minutes`})}if(k===2){const n=R(2,5);return Q(`How many hours are in ${n} days?`,n*24,{wrong:[n*12,n*60,n*20],sol:`${n} × 24 = ${n*24} hours`})}const h=R(1,10),m=P([40,45,50]),add=P([20,25,30,35]);const tot=m+add;return Q(`A film starts at ${h}:${m}. It lasts ${add} minutes. What time does it end?`,`${h+1}:${String(tot-60).padStart(2,'0')}`,{wrong:[`${h}:${tot}`,`${h+1}:${String(tot-50).padStart(2,'0')}`,`${h}:${String(tot-60).padStart(2,'0')}`,`${h+1}:${String(tot-60+5).padStart(2,'0')}`],sol:`${h}:${m} + ${60-m} minutes = ${h+1}:00, then ${tot-60} more minutes = ${h+1}:${String(tot-60).padStart(2,'0')}`})});
+
+/* Year 4 */
+topic('y4tab',4,'Times tables to 12 × 12','Use facts you know: 7 × 8 = 56 (5, 6, 7, 8).',d=>{const a=R(2,d===1?10:12),b=R(d===3?6:2,12);return rnd()<.6?Q(`${a} × ${b} = ?`,a*b,{wrong:[a*b+a,a*b-b,a*(b+1)+1],sol:`${a} × ${b} = ${a*b}`}):Q(`${a*b} ÷ ${a} = ?`,b,{wrong:[b+1,b-1,a],sol:`${a} × ${b} = ${a*b}`})});
+topic('y4round',4,'Rounding to 10, 100, 1000','Look at the digit to the right. 5 or more rounds up.',d=>{const t=d===1?10:d===2?P([10,100]):P([100,1000]);const n=d===1?R(11,999):d===2?R(101,9999):R(1001,99999);const a=Math.round(n/t)*t;return Q(`Round ${nf(n)} to the nearest ${nf(t)}.`,a,{wrong:[a===Math.floor(n/t)*t?a+t:a-t,Math.round(n/(t*10))*t*10,Math.round(n/(t/10||1))*(t/10||1)],sol:`It lies between ${nf(Math.floor(n/t)*t)} and ${nf(Math.floor(n/t)*t+t)}. It is nearer ${nf(a)}`})});
+topic('y4dec',4,'Tenths and hundredths','Dividing by 10 moves digits one place to the right.',d=>{const k=R(0,d===1?1:2);if(k===0){const n=R(1,99);return Q(`${n} ÷ 10 = ?`,n/10,{wrong:[n/100,n*10,n-10],sol:`Move each digit one place right: ${nf(n/10)}`})}if(k===1){const n=R(1,99)/10;return Q(`${nf(n)} × 10 = ?`,n*10,{wrong:[n*100,n+10,n/10],sol:`Move each digit one place left: ${nf(n*10)}`})}const n=R(1,999);return Q(`${n} ÷ 100 = ?`,n/100,{wrong:[n/10,n/1000,n*100],sol:`Move each digit two places right: ${nf(n/100)}`})});
+topic('y4area',4,'Area of rectangles','Area = length × width, measured in square units.',d=>{const l=R(2,d===1?10:12),w=R(2,d===1?6:12);if(d===3&&rnd()<.5)return Q(`A rectangle has area ${l*w} cm² and length ${l} cm. What is its width?`,w,{unit:'cm',wrong:[l*w-l,w+1,2*w],sol:`${l*w} ÷ ${l} = ${w} cm`});return Q(`What is the area of a rectangle ${l} cm by ${w} cm?`,l*w,{unit:'cm²',wrong:[2*(l+w),l+w,l*w+l],sol:`${l} × ${w} = ${l*w} cm²`})});
+topic('y4roman',4,'Roman numerals','I=1, V=5, X=10, L=50, C=100. A smaller numeral before a bigger one means subtract.',d=>{const n=R(1,d===1?20:d===2?50:100);if(rnd()<.5){return Q(`What is ${roman(n)} as a number?`,n,{wrong:[n+(n%5===4?2:1),n+10,n-1].filter(x=>x>0),sol:`${roman(n)} = ${n}`})}const ws=[n+1,n-1,n+5,n+10].filter(x=>x>0&&x<=150).map(roman);if(n%10===4)ws.unshift(roman(n-4)+'IIII');if(n%10===9)ws.unshift(roman(n-9)+'VIIII');return Q(`What is ${n} in Roman numerals?`,roman(n),{wrong:ws,sol:`${n} = ${roman(n)}`})});
+topic('y4neg',4,'Negative numbers','Use a number line. Going up adds, going down subtracts.',d=>{const s=R(d===1?-5:-12,6),c=R(2,d===1?8:14),up=rnd()<.5;const a=up?s+c:s-c;return Q(`The temperature is ${sn(s)}°C. It ${up?'rises':'falls'} by ${c}°C. What is the new temperature?`,a,{unit:'°C',allowNeg:true,wrong:[up?s-c:s+c,-a,a+1],sol:`${sn(s)} ${up?'+':'−'} ${c} = ${sn(a)}°C`})});
+topic('y4km',4,'Kilometres and metres','1 km = 1000 m.',d=>{if(d===1){const v=R(1,9);return Q(`${v} km = ? m`,v*1000,{wrong:[v*100,v*10,v*10000],sol:`${v} × 1000 = ${v*1000} m`})}if(d===2){const v=R(1,19)*500;return Q(`${nf(v)} m = ? km`,v/1000,{wrong:[v/100,v/10,v/10000],sol:`${nf(v)} ÷ 1000 = ${nf(v/1000)} km`})}const v=R(101,999)/100;return Q(`${nf(v)} km = ? m`,v*1000,{wrong:[v*100,v*10,v*10000],sol:`${nf(v)} × 1000 = ${nf(v*1000)} m`})});
+
+/* Year 5 */
+topic('y5mul',5,'Multiplying larger numbers','Use the column method. Remember the 0 placeholder when multiplying by tens.',d=>{let a,b;if(d===1){a=R(100,999);b=R(2,9)}else if(d===2){a=R(1000,9999);b=R(2,9)}else{a=R(12,199);b=R(12,99)}const tb=Math.floor(b/10)*10;return Q(`${a} × ${b} = ?`,a*b,{wrong:[a*b+a,a*b-a*10,a*(b%10)+a*Math.floor(b/10)],sol:b>=10?`${a} × ${tb} = ${a*tb}, ${a} × ${b%10} = ${a*(b%10)}. Add: ${a*b}`:`${a} × ${b} = ${a*b}`})});
+topic('y5div',5,'Short division','Divide each digit in turn and carry any remainder to the next digit.',d=>{const dv=R(2,9),q=R(d===1?11:101,d===1?99:999);if(d===3&&rnd()<.5){const r=R(1,dv-1),n=dv*q+r;return Q(`What is the remainder when ${n} is divided by ${dv}?`,r,{wrong:[dv-r,r+1,0,q%10],sol:`${dv} × ${q} = ${dv*q}, and ${n} − ${dv*q} = ${r}`})}return Q(`${dv*q} ÷ ${dv} = ?`,q,{wrong:[q+1,q-1,q+10],sol:`${dv} × ${q} = ${dv*q}, so the answer is ${q}`})});
+topic('y5fadd',5,'Adding and subtracting fractions (same denominator)','When the denominators match, add or subtract the numerators only.',d=>{const de=R(3,12),a=R(1,de-1),b=R(1,de-1);const sub=rnd()<.5&&a!==b;const[x,y]=sub?[Math.max(a,b),Math.min(a,b)]:[a,b];const n=sub?x-y:x+y;return Q(`${F(x,de)} ${sub?'−':'+'} ${F(y,de)} = ?`,fs(n,de),{wrong:[F(n,de*2),F(n+1,de),F(n,de+1),F(sub?x+y:Math.abs(x-y),de)].filter(f=>!f.includes('<span>0</span>')),sol:`Keep the denominator ${de}. ${x} ${sub?'−':'+'} ${y} = ${n}, so ${F(n,de)}${gcd(n,de)>1||n>=de?' = '+fs(n,de):''}`})});
+topic('y5pct',5,'Simple percentages','10% = ÷10, 50% = ÷2, 25% = ÷4, 1% = ÷100.',d=>{const p=P(d===1?[10,50]:d===2?[10,50,25,20,1]:[5,15,20,75,30,1]);const st=100/gcd(p,100);const amt=st*R(1,d===1?10:15)*(st<10?(R(1,3)*10/st>1?1:1):1);const a=amt*p/100;return Q(`What is ${p}% of ${nf(amt)}?`,a,{wrong:[amt/p,amt-a,a*10,a/10],sol:`1% of ${nf(amt)} = ${nf(amt/100)}, so ${p}% = ${nf(amt/100)} × ${p} = ${nf(a)}`})});
+topic('y5prime',5,'Prime numbers','A prime has exactly two factors: 1 and itself.',d=>{const mx=d===1?30:d===2?60:100;if(rnd()<.5){const pr=[];for(let i=2;i<=mx;i++)if(isPrime(i))pr.push(i);const np=[];for(let i=4;i<=mx;i++)if(!isPrime(i)&&i%2)np.push(i);const c=P(pr);const ws=shuffle([...new Set(np.concat([1,9,15,21,27,33,39,49,51,57].filter(x=>x<=mx)))]).slice(0,3);return Q(`Which of these is a prime number?`,String(c),{wrong:ws.map(String),sol:`${c} only divides by 1 and ${c}. ${ws.map(w=>w===1?'1 is not prime':(()=>{for(let i=2;i<w;i++)if(w%i===0)return `${w} = ${i} × ${w/i}`})()).join('; ')}`})}let n=R(2,mx-10);let p=n+1;while(!isPrime(p))p++;let q=p+1;while(!isPrime(q))q++;return Q(`What is the first prime number after ${n}?`,p,{wrong:[q,p+1,p%2?p+2:p-1].filter(x=>!isPrime(x)||x===q),sol:`Check each number after ${n}: ${p} is the first with only two factors`})});
+topic('y5sq',5,'Square and cube numbers','Square = n × n. Cube = n × n × n.',d=>{const k=R(0,d===1?0:2);if(k===0){const n=R(2,d===1?10:15);return Q(`What is ${n}² ?`,n*n,{wrong:[2*n,n*n+n,n*n-1,(n+1)*(n+1)],sol:`${n} × ${n} = ${n*n}`})}if(k===1){const n=R(2,d===3?10:6);return Q(`What is ${n}³ ?`,n**3,{wrong:[3*n,n*n,n**3+n*n],sol:`${n} × ${n} × ${n} = ${n**3}`})}const n=R(2,15);return Q(`What is the square root of ${n*n}?`,n,{wrong:[n*n/2,n+1,n-1],sol:`${n} × ${n} = ${n*n}, so √${n*n} = ${n}`})});
+topic('y5x10',5,'× and ÷ by 10, 100, 1000','Digits move left when multiplying, right when dividing — one place for each zero.',d=>{const t=P(d===1?[10,100]:[10,100,1000]);const v=d===1?R(2,99):fx(R(11,999)/P([10,100]));if(rnd()<.5)return Q(`${nf(v)} × ${nf(t)} = ?`,v*t,{wrong:[v*t*10,v*t/10,v/t],sol:`Move digits ${Math.log10(t)} place${t>10?'s':''} left: ${nf(v*t)}`});return Q(`${nf(v)} ÷ ${nf(t)} = ?`,v/t,{wrong:[v/t*10,v/t/10,v*t],sol:`Move digits ${Math.log10(t)} place${t>10?'s':''} right: ${nf(v/t)}`})});
+
+/* Year 6 */
+topic('y6bod',6,'Order of operations (BIDMAS)','Brackets, Indices, Division and Multiplication, then Addition and Subtraction.',d=>{const a=R(2,12),b=R(2,9),c=R(2,9),e=R(2,6);const k=R(0,d===1?1:d===2?3:4);let q,v,w,s;
+ if(k===0){q=`${a} + ${b} × ${c}`;v=a+b*c;w=(a+b)*c;s=`${b} × ${c} = ${b*c} first, then ${a} + ${b*c} = ${v}`}
+ else if(k===1){q=`(${a} + ${b}) × ${c}`;v=(a+b)*c;w=a+b*c;s=`Brackets first: ${a+b}, then × ${c} = ${v}`}
+ else if(k===2){q=`${a} × ${b} − ${c*e} ÷ ${e}`;v=a*b-c;w=(a*b-c*e)/e;s=`${a} × ${b} = ${a*b} and ${c*e} ÷ ${e} = ${c}, then ${a*b} − ${c} = ${v}`}
+ else if(k===3){q=`${a*b} − ${a} × ${b-1} + ${c}`;v=a*b-a*(b-1)+c;w=(a*b-a)*(b-1)+c;s=`${a} × ${b-1} = ${a*(b-1)} first, then ${a*b} − ${a*(b-1)} + ${c} = ${v}`}
+ else{q=`${b}² + ${c} × (${a} − ${e})`;v=b*b+c*(a-e);w=(b*b+c)*(a-e);s=`Brackets: ${a-e}. Index: ${b*b}. Then ${c} × ${a-e} = ${c*(a-e)}, + ${b*b} = ${v}`}
+ if(!Number.isInteger(w))w=v+b;return Q(`${q} = ?`,v,{wrong:[w,v+c,v-1],allowNeg:v<0,sol:s})});
+topic('y6ldiv',6,'Long division','Divide, multiply, subtract, bring down — repeat.',d=>{const dv=R(11,d===1?15:25),q=R(12,d===3?250:99);return Q(`${nf(dv*q)} ÷ ${dv} = ?`,q,{wrong:[q+1,q-1,q+10,q*10],sol:`${dv} × ${q} = ${nf(dv*q)}, so the answer is ${q}`})});
+topic('y6fops',6,'Fractions: add, subtract, multiply','Add/subtract: make the denominators the same first. Multiply: top × top, bottom × bottom.',d=>{const a=R(1,5),b=R(2,8),c=R(1,5),e=R(2,8);const n1=Math.min(a,b-1),n2=Math.min(c,e-1);if(d===3&&rnd()<.5){return Q(`${F(n1,b)} × ${F(n2,e)} = ?`,fs(n1*n2,b*e),{wrong:[fs(n1*e,b*n2),fs(n1+n2,b+e),fs(n1*n2,b+e),fs(n1*n2+1,b*e),fs(n1*n2,b*e+1),fs(n1+n2,b*e)],sol:`Top × top: ${n1*n2}. Bottom × bottom: ${b*e}. So ${fs(n1*n2,b*e)}`})}let B=b,E=e;if(d===1){E=b*R(2,3);}if(B===E)E=B+1;const N1=Math.min(n1,B-1),N2=Math.min(n2,E-1);const sub=d>1&&rnd()<.5&&N1/B>N2/E;const L=lcm(B,E);const num=sub?N1*(L/B)-N2*(L/E):N1*(L/B)+N2*(L/E);return Q(`${F(N1,B)} ${sub?'−':'+'} ${F(N2,E)} = ?`,fs(num,L),{wrong:[fs(sub?N1-N2:N1+N2,B+E),fs(sub?N1-N2:N1+N2,L),fs(num+1,L),fs(num,L*2)].filter(x=>x!==''),sol:`Common denominator ${L}: ${F(N1*(L/B),L)} ${sub?'−':'+'} ${F(N2*(L/E),L)} = ${F(num,L)}${gcd(num,L)>1?' = '+fs(num,L):''}`})});
+topic('y6pct',6,'Percentages of amounts','Find 1% or 10% first, then build up.',d=>{let p,amt;if(d===1){p=R(1,9)*10;amt=R(2,30)*10}else if(d===2){p=R(1,19)*5;amt=R(1,20)*20}else{p=R(1,99);amt=R(1,20)*100}const a=amt*p/100;return Q(`What is ${p}% of ${nf(amt)}?`,a,{wrong:[amt-a,a*10,amt/p,a+amt/10],sol:`1% = ${nf(amt)} ÷ 100 = ${nf(amt/100)}. ${p}% = ${nf(amt/100)} × ${p} = ${nf(a)}`})});
+topic('y6ratio',6,'Ratio — sharing','Add the parts, find one part, then multiply.',d=>{let a=R(1,5),b=R(1,6);if(a===b)b++;const k=R(2,d===3?20:10),tot=(a+b)*k;const first=rnd()<.5;const ans=(first?a:b)*k;return Q(`Share £${tot} between Amy and Ben in the ratio ${a} : ${b}. How much does ${first?'Amy':'Ben'} get?`,ans,{unit:'',wrong:[(first?b:a)*k,tot/2,Math.round(tot/(first?a:b)),ans+k],sol:`${a} + ${b} = ${a+b} parts. £${tot} ÷ ${a+b} = £${k} per part. ${first?'Amy':'Ben'}: ${first?a:b} × £${k} = £${ans}`})});
+topic('y6alg',6,'Simple formulae and missing numbers','Replace the letter with its value, or work backwards using inverse operations.',d=>{if(rnd()<.5){const m=R(2,9),c=R(1,20),n=R(2,d===3?15:10);return Q(`y = ${m}n + ${c}. Find y when n = ${n}.`,m*n+c,{wrong:[m+n+c,m*10+n+c,m*(n+c)],sol:`${m} × ${n} = ${m*n}, + ${c} = ${m*n+c}`})}const m=R(2,9),c=R(1,20),x=R(2,12);return Q(`? × ${m} + ${c} = ${m*x+c}`,x,{wrong:[(m*x+c)/m,x+1,m*x],sol:`${m*x+c} − ${c} = ${m*x}, then ÷ ${m} = ${x}`})});
+topic('y6tri',6,'Area of triangles','Area of a triangle = ½ × base × height.',d=>{let b=R(2,20),h=R(2,15);if(b*h%2)b++;if(d===3&&rnd()<.5){const A=b*h/2;return Q(`A triangle has area ${A} cm² and base ${b} cm. What is its height?`,h,{unit:'cm',wrong:[A/b,h*2,A-b],sol:`Area × 2 = ${2*A}, then ÷ ${b} = ${h} cm`})}return Q(`A triangle has base ${b} cm and height ${h} cm. What is its area?`,b*h/2,{unit:'cm²',wrong:[b*h,b+h,b*h/4],sol:`½ × ${b} × ${h} = ${b*h/2} cm²`})});
+
+/* Year 7 */
+topic('y7sf',7,'Significant figures','Start counting at the first non-zero digit. Then look at the next digit: 5 or more rounds up. Keep zeros as place holders.',d=>{const k=d===1?R(1,2):R(1,3);const L=k+R(1,3);const dg=[R(1,9)];for(let i=1;i<L;i++)dg.push(R(0,9));dg[k]=P([0,1,2,3,4,6,7,8,9]);const N=+dg.join('');let val;if(d===1)val=N;else if(d===2)val=N/10**(L-R(1,Math.min(3,L-1)));else val=N/10**(L+R(1,3));val=fx(val);const ans=fx(+val.toPrecision(k));const up=dg[k]>=5;
+ const mag=10**(Math.floor(Math.log10(Math.abs(val)))-k+1);const alt=fx(up?ans-mag:ans+mag);const noz=fx(+dg.slice(0,k).join('')+(up?1:0));const k2=fx(+val.toPrecision(k+1));const dpw=fx(+val.toFixed(Math.max(0,k)));
+ return Q(`Round ${nf(val)} to ${k} significant figure${k>1?'s':''}.`,ans,{wrong:[alt,noz,k2,dpw],sol:`The first ${k} significant figure${k>1?'s are':' is'} ${dg.slice(0,k).join('')}. The next digit is ${dg[k]}, so round ${up?'up':'down'}${d===1?' and fill the rest with zeros':''}: ${nf(ans)}`})});
+topic('y7dp',7,'Rounding to decimal places','Count the places after the decimal point, then look at the next digit.',d=>{const k=d===1?1:R(1,2);const ip=d===3?R(0,99):R(1,20);const L=k+R(1,2);const fd=[];for(let i=0;i<L;i++)fd.push(R(0,9));fd[k]=P([0,1,2,3,4,6,7,8,9]);const str=ip+'.'+fd.join('');const v=+str;const ans=+v.toFixed(k);const u=10**-k;return Q(`Round ${str} to ${k} decimal place${k>1?'s':''}.`,ans,{wrong:[fd[k]>=5?ans-u:ans+u,+v.toFixed(k+1),+v.toFixed(Math.max(0,k-1)),+v.toPrecision(k)],sol:`Keep ${k} digit${k>1?'s':''} after the point. The next digit is ${fd[k]}, so round ${fd[k]>=5?'up':'down'}: ${nf(ans)}`})});
+topic('y7mul',7,'Multiplying decimals','Ignore the decimal points and multiply whole numbers. Then count the decimal places in the question and put that many in the answer.',d=>{let ai,pa,bi,pb;if(d===1){ai=P([R(2,9),R(11,49)]);pa=1;bi=R(2,9);pb=0}else if(d===2){ai=P([R(2,9),R(11,30)]);pa=1;bi=R(2,9);pb=1}else{if(rnd()<.5){ai=R(101,999);pa=2;bi=R(2,15);pb=1}else{ai=R(11,99);pa=2;bi=R(2,9);pb=2}}if(ai%10===0)ai++;const a=ai/10**pa,b=bi/10**pb,p=ai*bi,dp=pa+pb,ans=fx(a*b);return Q(`${nf(a)} × ${nf(b)} = ?`,ans,{wrong:[fx(p/10**(dp-1)),fx(p/10**(dp+1)),fx(p/10**Math.max(pa,pb)),fx(ans+(pb?a:b))],sol:`Ignore the points: ${ai} × ${bi} = ${p}. There ${dp===1?'is':'are'} ${dp} decimal place${dp>1?'s':''} in the question, so the answer is ${nf(ans)}`})});
+topic('y7div',7,'Dividing decimals','Make the number you are dividing BY a whole number: multiply both numbers by 10 (or 100). The answer does not change. Then divide as normal.',d=>{let q,dv;if(d===1){dv=R(2,9);q=R(11,99)/10}else if(d===2){dv=R(2,9)/10;q=rnd()<.5?R(2,20):R(11,60)/10}else{dv=rnd()<.5?R(11,25)/10:R(2,9)/100;q=R(2,40)/(rnd()<.5?1:10)}q=fx(q);dv=fx(dv);const dd=fx(q*dv);const p=decs(dv),s=10**p;const sol=p?`Multiply both by ${s} so you divide by a whole number:<br>${nf(dd)} ÷ ${nf(dv)} = ${nf(fx(dd*s))} ÷ ${nf(fx(dv*s))} = ${nf(q)}`:`Divide as normal and keep the decimal point in line: ${nf(dd)} ÷ ${nf(dv)} = ${nf(q)}`;return Q(`${nf(dd)} ÷ ${nf(dv)} = ?`,q,{wrong:[fx(q/10),fx(q*10),fx(q/100),fx(dd*dv)],sol})});
+topic('y7like',7,'Collecting like terms','Like terms have exactly the same letters (and powers). Add their numbers — keep the sign in front of each term with it.',d=>{const pool=d===1?P([['a','b'],['x','y']]):d===2?P([['a','b','c'],['x','y','']]):['x^2','x','y',''];let ts,comb;for(let g=0;g<30;g++){ts=pool.map(v=>[(d===1?1:rnd()<.35?-1:1)*R(1,9),v]);const n=d===1?4:d===2?5:6;while(ts.length<n)ts.push([(d===1?1:rnd()<.4?-1:1)*R(1,9),P(pool)]);ts=shuffle(ts);if(ts[0][0]<0)ts[0][0]=-ts[0][0];comb=pool.map(v=>[ts.filter(t=>t[1]===v).reduce((s,t)=>s+t[0],0),v]);if(comb.filter(c=>c[0]).length>=2)break}
+ const tot=ts.reduce((s,t)=>s+Math.abs(t[0]),0);const sol=pool.map(v=>{const g=ts.filter(t=>t[1]===v);return g.length?`${v||'numbers'}: ${HP(g)} = ${HP([[g.reduce((s,t)=>s+t[0],0),v]])}`:''}).filter(Boolean).join('<br>');
+ const wrongSigns=pool.map(v=>[ts.filter(t=>t[1]===v).reduce((s,t)=>s+Math.abs(t[0]),0),v]);
+ return Q(`Simplify: ${HP(ts)}`,HP(comb),{wrong:polyAlts(comb,4,[wrongSigns]).concat(H(`${tot}${pool.filter(Boolean).join('')}`)),sol})});
+topic('y7simp',7,'Simplifying expressions (× and ÷)','Multiply the numbers, then put the letters together. a × a = a². When dividing, cancel numbers and letters.',d=>{const v=d===1?P([['a','b'],['x','y'],['p','q']]):P([['a','b'],['x','y'],['m','n']]);const[x,y]=v;const c1=R(2,9),c2=R(2,9);const k=R(0,d===1?1:d===2?3:4);
+ if(k===0)return Q(`Simplify: ${c1}${x} × ${c2}${y}`,`${c1*c2}${x}${y}`,{wrong:[`${c1+c2}${x}${y}`,`${c1*c2}${x} + ${y}`.replace(/ \+ /,'+'),`${c1}${c2}${x}${y}`,`${c1*c2}${x}${y}²`],sol:`${c1} × ${c2} = ${c1*c2}, ${x} × ${y} = ${x}${y}. Answer: ${c1*c2}${x}${y}`});
+ if(k===1)return Q(`Simplify: ${c1}${x} × ${c2}${x}`,H(`${c1*c2}${x}^2`),{wrong:[`${c1*c2}${x}`,H(`${c1+c2}${x}^2`),`${c1+c2}${x}`,H(`${c1*c2}${x}^3`)],sol:`${c1} × ${c2} = ${c1*c2}, ${x} × ${x} = ${H(x+'^2')}. Answer: ${H(c1*c2+x+'^2')}`});
+ if(k===2)return Q(`Simplify: ${c1*c2}${x}${y} ÷ ${c1}${x}`,`${c2}${y}`,{wrong:[`${c2}${x}${y}`,`${c1*c2-c1}${y}`,`${c2}`,`${c1}${y}`],sol:`${c1*c2} ÷ ${c1} = ${c2}, and ${x}${y} ÷ ${x} = ${y}. Answer: ${c2}${y}`});
+ if(k===3)return Q(`Simplify: ${c1*c2}${H(x+'^2')} ÷ ${c1}${x}`,`${c2}${x}`,{wrong:[H(`${c2}${x}^2`),`${c2}`,H(`${c1*c2-c1}${x}`),H(`${c2}${x}^3`)],sol:`${c1*c2} ÷ ${c1} = ${c2}, and ${H(x+'^2')} ÷ ${x} = ${x}. Answer: ${c2}${x}`});
+ return Q(`Simplify: ${c1}${H(x+'^2')}${y} × ${c2}${x}${y}`,H(`${c1*c2}${x}^3${y}^2`),{wrong:[H(`${c1*c2}${x}^2${y}^2`),H(`${c1+c2}${x}^3${y}^2`),H(`${c1*c2}${x}^3${y}`),H(`${c1*c2}${x}^6${y}`)],sol:`Numbers: ${c1*c2}. ${H(x+'^2')} × ${x} = ${H(x+'^3')}. ${y} × ${y} = ${H(y+'^2')}. Answer: ${H(c1*c2+x+'^3'+y+'^2')}`})});
+topic('y7subs',7,'Substitution','Replace each letter with its number. Remember 3a means 3 × a, and use BIDMAS.',d=>{const lo=d===3?-6:1,a=R(lo,9)||2,b=R(lo,9)||3;const T7=[['3a + 2b',(a,b)=>3*a+2*b],['5a - 2b',(a,b)=>5*a-2*b],['ab - 5',(a,b)=>a*b-5],['2(a + b)',(a,b)=>2*(a+b)],['a^2 + b',(a,b)=>a*a+b],['4a - b^2',(a,b)=>4*a-b*b]];const[e,f]=P(d===1?T7.slice(0,4):T7);const v=f(a,b);const show=H(e.replace(/(\d)([ab(])/g,'$1×$2').replace(/([ab])([ab])/g,'$1×$2').replace(/a/g,'#A').replace(/b/g,'#B')).replace(/#A/g,pn(a)).replace(/#B/g,pn(b));return Q(`Find the value of ${H(e)} when a = ${sn(a)} and b = ${sn(b)}.`,v,{allowNeg:true,wrong:[f(b,a),v+a,-v,v-2],sol:`${show} = ${sn(v)}`})});
+topic('y7eq1',7,'One-step equations','Do the inverse operation to both sides: + ↔ −, × ↔ ÷.',d=>{const L=P(['x','y','n','m']),x=d===3?R(-9,15)||4:R(1,15),a=R(2,d===1?9:15);const k=R(0,3);let q,s,w;if(k===0){q=`${L} + ${a} = ${x+a}`;s=`Subtract ${a} from both sides`;w=x+2*a}else if(k===1){q=`${L} - ${a} = ${x-a}`;s=`Add ${a} to both sides`;w=x-2*a}else if(k===2){q=`${a}${L} = ${a*x}`;s=`Divide both sides by ${a}`;w=a*x-a}else{q=`${L} ÷ ${a} = ${x}`;s=`Multiply both sides by ${a}`;w=x/a};return Q(`Solve: ${H(q)}`,x,{allowNeg:true,wrong:[w,x+1,-x],sol:`${s}: ${L} = ${sn(x)}`})});
+topic('y7eqm',7,'Multi-step equations','Undo + and − first, then undo × and ÷. Do the same thing to both sides, one step at a time. If x is on both sides, first take the smaller x term away from both sides.',d=>{const L=P(['x','y','n']);const x=d===3?(R(-8,12)||3):R(1,12);const a=R(2,9);const k=d===1?0:d===2?R(0,3):R(0,4);
+ if(k===0){const b=R(1,20);const c=a*x+b;return Q(`Solve: ${H(`${a}${L} + ${b} = ${c}`)}`,x,{allowNeg:true,wrong:[(c+b)/a,c/a-b,c-b-a],sol:`Subtract ${b}: ${a}${L} = ${c-b}<br>Divide by ${a}: ${L} = ${sn(x)}`})}
+ if(k===1){const b=R(1,20);const c=a*x-b;return Q(`Solve: ${H(`${a}${L} - ${b} = ${c}`)}`,x,{allowNeg:true,wrong:[(c-b)/a,c/a+b,c+b-a],sol:`Add ${b}: ${a}${L} = ${c+b}<br>Divide by ${a}: ${L} = ${sn(x)}`})}
+ if(k===2){const b=R(1,9);const c=a*(x+b);return Q(`Solve: ${H(`${a}(${L} + ${b}) = ${c}`)}`,x,{allowNeg:true,wrong:[(c-b)/a,c/a+b,(c-a*b)/a+b],sol:`Divide by ${a}: ${L} + ${b} = ${c/a}<br>Subtract ${b}: ${L} = ${sn(x)}`})}
+ if(k===3){const b=R(1,9);const c=x/a+b;const X=a*(R(1,6)+(d===3?-2:0));const C=X/a+b;return Q(`Solve: ${F(L,a)} + ${b} = ${C}`,X,{allowNeg:true,wrong:[(C-b)/a,C*a-b,C-b],sol:`Subtract ${b}: ${F(L,a)} = ${C-b}<br>Multiply by ${a}: ${L} = ${sn(X)}`})}
+ const c=R(1,a-1),b=R(-10,10)||5;const e=(a-c)*x+b;return Q(`Solve: ${H(`${a}${L}${sg(b)} = ${c===1?'':c}${L}${sg(e)}`)}`,x,{allowNeg:true,wrong:[(e-b)/(a+c),(e+b)/(a-c),(e-b)],sol:`Subtract ${c===1?'':c}${L} from both sides: ${H(`${a-c===1?'':a-c}${L}${sg(b)} = ${e}`)}<br>${b<0?'Add '+(-b):'Subtract '+b}: ${a-c===1?'':a-c}${L} = ${sn(e-b)}<br>${a-c>1?`Divide by ${a-c}: `:''}${L} = ${sn(x)}`})});
+const MU={mm:[1,'L'],cm:[10,'L'],m:[1000,'L'],km:[1e6,'L'],g:[1,'M'],kg:[1000,'M'],ml:[1,'C'],l:[1000,'C']};
+topic('y7metric',7,'Metric measurements','km → m ×1000, m → cm ×100, cm → mm ×10, kg → g ×1000, l → ml ×1000. Big unit → small unit: multiply. Small unit → big unit: divide.',d=>{const pairs=d<3?[['cm','mm'],['m','cm'],['km','m'],['kg','g'],['l','ml']]:[['m','mm'],['km','cm'],['kg','g'],['l','ml'],['m','cm'],['km','m']];const[B,S]=P(pairs);const f=MU[B][0]/MU[S][0];let sv;if(d===1)sv=f*R(2,9);else if(d===2)sv=(f/10)*R(11,99);else sv=f>=100?(f/100)*R(101,999):(f/10)*R(11,99);sv=fx(sv);const bv=fx(sv/f);const toSmall=d===1||rnd()<.5;
+ if(toSmall)return Q(`${nf(bv)} ${B} = ? ${S}`,sv,{wrong:[fx(sv/10),fx(sv*10),fx(bv/f)],sol:`1 ${B} = ${nf(f)} ${S}. Big → small, so multiply: ${nf(bv)} × ${nf(f)} = ${nf(sv)} ${S}`});
+ return Q(`${nf(sv)} ${S} = ? ${B}`,bv,{wrong:[fx(bv*10),fx(bv/10),fx(sv*f)],sol:`1 ${B} = ${nf(f)} ${S}. Small → big, so divide: ${nf(sv)} ÷ ${nf(f)} = ${nf(bv)} ${B}`})});
+topic('y7neg',7,'Calculating with negative numbers','Two signs the same → positive. Two signs different → negative. Subtracting a negative = adding.',d=>{let a=R(-12,12)||-3,b=R(-12,12)||-4;if(a>0&&b>0)b=-b;const op=P(d===1?['+','−']:['+','−','×','÷']);let q,v,w;if(op==='+'){v=a+b;w=a-b;q=`${sn(a)} + ${pn(b)}`}else if(op==='−'){v=a-b;w=a+b;q=`${sn(a)} − ${pn(b)}`}else if(op==='×'){v=a*b;w=-v;q=`${sn(a)} × ${pn(b)}`}else{v=a;const p=a*b;q=`${sn(p)} ÷ ${pn(b)}`;w=-a}return Q(`${q} = ?`,v,{allowNeg:true,wrong:[w,-v,v+1],sol:op==='×'||op==='÷'?`${Math.sign(a)===Math.sign(b)||op==='÷'&&Math.sign(a*b)===Math.sign(b)?'Same signs → positive':'Different signs → negative'}: ${sn(v)}`:op==='−'?`Subtracting ${pn(b)} is the same as adding ${sn(-b)}: ${sn(v)}`:`Adding a negative is the same as subtracting: ${sn(v)}`})});
+topic('y7hcf',7,'HCF and LCM','HCF = biggest number that divides both. LCM = smallest number both divide into.',d=>{if(rnd()<.5){const g=R(2,d===3?15:8);let m=R(2,7),n=R(2,9);while(gcd(m,n)!==1||m===n)n=R(2,9);return Q(`What is the HCF of ${g*m} and ${g*n}?`,g,{wrong:[g*m*n,g*Math.min(m,n),g>2&&g%2===0?g/2:g+1],sol:`${g*m} = ${g} × ${m}, ${g*n} = ${g} × ${n}. HCF = ${g}`})}const a=R(2,d===3?15:10);let b=R(2,d===3?15:10);if(a===b)b++;const L=lcm(a,b);return Q(`What is the LCM of ${a} and ${b}?`,L,{wrong:[a*b===L?L*2:a*b,gcd(a,b),L+Math.min(a,b)],sol:`Multiples of ${Math.max(a,b)}: ${[1,2,3,4].map(i=>i*Math.max(a,b)).join(', ')}… The first one that ${Math.min(a,b)} divides into is ${L}`})});
+topic('y7fdp',7,'Fractions, decimals and percentages','Percent means "out of 100". Decimal → % : × 100. Fraction → decimal: top ÷ bottom.',d=>{const L=[[1,2],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5],[1,10],[3,10],[7,10],[9,10],[1,8],[3,8],[1,20],[7,20],[1,25],[3,50]];const[n,de]=P(d===1?L.slice(0,11):L);const dec=fx(n/de),pc=fx(dec*100);const k=R(0,3);
+ if(k===0)return Q(`Write ${F(n,de)} as a decimal.`,dec,{wrong:[fx(n+de/100),fx(de/n/10),fx(dec*10),fx(n/10)],sol:`${n} ÷ ${de} = ${nf(dec)}`});
+ if(k===1)return Q(`Write ${F(n,de)} as a percentage.`,pc,{unit:'%',wrong:[fx(dec),fx(n*10),fx(pc/10),fx(100-pc)],sol:`${n} ÷ ${de} = ${nf(dec)}, × 100 = ${nf(pc)}%`});
+ if(k===2)return Q(`Write ${nf(dec)} as a percentage.`,pc,{unit:'%',wrong:[fx(dec*10),fx(dec),fx(pc*10)],sol:`× 100: ${nf(pc)}%`});
+ return Q(`Write ${nf(pc)}% as a fraction in its simplest form.`,F(n,de),{wrong:[F(pc,100),F(n,de*10),F(de,100),F(n+1,de)],sol:`${F(pc,100)} = ${F(n,de)} (divide top and bottom by ${100/de})`})});
+
+/* Year 8 */
+topic('y8exp',8,'Expanding brackets','Multiply EVERY term inside the bracket by the term outside. Watch the signs.',d=>{const k=R(0,d===1?0:d===2?2:4);
+ if(k===0){const m=R(2,9),a=R(1,9),b=R(1,9);const ans=[[m*a,'x'],[m*b,'']];return Q(`Expand: ${H(`${m}(${poly([[a,'x'],[b,'']])})`)}`,HP(ans),{wrong:polyAlts(ans,3,[[[m*a,'x'],[b,'']],[[a+m,'x'],[b+m,'']]]),sol:`${m} × ${a===1?'':a}x = ${m*a}x and ${m} × ${b} = ${m*b}`})}
+ if(k===1){const m=R(2,9),a=R(1,9),b=R(1,9);const ans=[[-m*a,'x'],[m*b,'']];return Q(`Expand: ${H(`-${m}(${poly([[a,'x'],[-b,'']])})`)}`,HP(ans),{wrong:polyAlts(ans,3,[[[-m*a,'x'],[-m*b,'']]]),sol:`−${m} × ${a===1?'':a}x = −${m*a}x and −${m} × −${b} = +${m*b}`})}
+ if(k===2){const m=R(1,6),b=R(-9,9)||2;const ans=[[m,'x^2'],[m*b,'x']];return Q(`Expand: ${H(`${m===1?'':m}x(x${sg(b)})`)}`,HP(ans),{wrong:polyAlts(ans,3,[[[m,'x'],[m*b,'x']],[[m,'x^2'],[b,'']]]),sol:`${H(`${m===1?'':m}x × x = ${m===1?'':m}x^2`)} and ${H(`${m===1?'':m}x × ${pn(b)} = ${m*b}x`)}`})}
+ if(k===3){const m=R(2,6),a=R(1,9),n=R(2,6),b=R(1,9),neg=rnd()<.5;const ans=[[m+(neg?-n:n),'x'],[m*a+(neg?-n*b:n*b),'']];return Q(`Expand and simplify: ${H(`${m}(x + ${a}) ${neg?'-':'+'} ${n}(x + ${b})`)}`,HP(ans),{wrong:polyAlts(ans,3,[[[m+(neg?-n:n),'x'],[m*a+(neg?n*b:n*b),'']]]),sol:`${H(`${m}x + ${m*a}`)} ${neg?'−':'+'} ${H(`${n}x + ${n*b}`)}${neg?' (the − changes both signs)':''} = ${HP(ans)}`})}
+ const a=R(-9,9)||1,b=R(-9,9)||2;const ans=[[1,'x^2'],[a+b,'x'],[a*b,'']];return Q(`Expand and simplify: ${H(`(x${sg(a)})(x${sg(b)})`)}`,HP(ans),{wrong:polyAlts(ans,3,[[[1,'x^2'],[a*b,'']],[[1,'x^2'],[a*b,'x'],[a+b,'']]]),sol:`x × x = ${H('x^2')}, x × ${pn(b)} + ${pn(a)} × x = ${H(poly([[a+b,'x']]))}, ${pn(a)} × ${pn(b)} = ${sn(a*b)}`})});
+topic('y8fac',8,'Factorising','Find the highest common factor of all terms and put it outside the bracket. Check by expanding.',d=>{const k=R(0,d===1?0:d===2?1:2);
+ if(k===0){const m=R(2,9);let a=R(1,9),b=R(1,9);while(gcd(a,b)!==1)b=R(1,9);if(rnd()<.4)b=-b;const inside=poly([[a,'x'],[b,'']]);const g2=m%2===0?2:m%3===0?3:1;const w=[`${m*a}(x${sg(b===m*a?b+1:b)})`,`${m}(${poly([[a*m,'x'],[b,'']])})`];if(g2>1&&g2!==m)w.push(`${g2}(${poly([[m*a/g2,'x'],[m*b/g2,'']])})`);w.push(`${m}(${poly([[a,'x'],[-b,'']])})`);w.push(`${m}x(${poly([[a,''],[b,'']])})`);return Q(`Factorise fully: ${HP([[m*a,'x'],[m*b,'']])}`,H(`${m}(${inside})`),{wrong:w.map(H),sol:`HCF of ${m*a} and ${Math.abs(m*b)} is ${m}. ${m} × (${H(inside)}) — check: expands back`})}
+ if(k===1){const m=R(1,6);let a=R(1,6),b=R(1,9);while(gcd(a,b)!==1)b=R(1,9);if(rnd()<.5)b=-b;const M=m===1?'':m;const ans=`${M}x(${poly([[a,'x'],[b,'']])})`;return Q(`Factorise fully: ${HP([[m*a,'x^2'],[m*b,'x']])}`,H(ans),{wrong:[`x(${poly([[m*a,'x'],[m*b,'']])})`,`${M}(${poly([[a,'x^2'],[b,'x']])})`,`${M}x(${poly([[a,'x'],[-b,'']])})`,`${M}x(${poly([[a,'x^2'],[b,'']])})`].filter(s=>s!==ans).map(H),sol:`Both terms contain ${M}x. ${H(ans)}`})}
+ const p=R(-9,9)||1,q=R(-9,9)||2;const ans=`(x${sg(p)})(x${sg(q)})`;return Q(`Factorise: ${HP([[1,'x^2'],[p+q,'x'],[p*q,'']])}`,H(ans),{wrong:[`(x${sg(-p)})(x${sg(-q)})`,`(x${sg(p*q)})(x${sg(1)})`,`(x${sg(p+q)})(x${sg(p*q===p+q?1:0)})`.replace(' + 0',''),`(x${sg(p)})(x${sg(-q)})`,`(x${sg(-p)})(x${sg(q)})`].filter(s=>s!==ans&&!s.includes('(x)')).map(H),sol:`Find two numbers that multiply to ${sn(p*q)} and add to ${sn(p+q)}: ${sn(p)} and ${sn(q)}`})});
+topic('y8eqb',8,'Equations with unknowns on both sides','Get the letter on one side (subtract the smaller letter term), numbers on the other side.',d=>{const x=d===1?R(1,10):R(-8,12)||5;let a=R(3,9),c=R(1,a-1);if(d===3&&rnd()<.5){const b=R(1,6);const e=a*x+a*b-c*x;return Q(`Solve: ${H(`${a}(x + ${b}) = ${c===1?'':c}x${sg(e)}`)}`,x,{allowNeg:true,wrong:[(e-b)/(a-c),(e-a*b)/(a+c),(e-a*b)],sol:`Expand: ${H(`${a}x + ${a*b} = ${c===1?'':c}x${sg(e)}`)}<br>Subtract ${c===1?'':c}x: ${H(`${a-c}x + ${a*b} = ${e}`)}<br>${a*b>0?'Subtract':'Add'} ${a*b}: ${H(`${a-c}x = ${e-a*b}`)}<br>x = ${sn(x)}`})}const b=d===1?R(1,15):R(-12,12)||4;const e=(a-c)*x+b;return Q(`Solve: ${H(`${a}x${sg(b)} = ${c===1?'':c}x${sg(e)}`)}`,x,{allowNeg:true,wrong:[(e-b)/(a+c),(e+b)/(a-c),e-b],sol:`Subtract ${c===1?'':c}x: ${H(`${a-c===1?'':a-c}x${sg(b)} = ${e}`)}<br>${b<0?'Add '+(-b):'Subtract '+b}: ${H(`${a-c===1?'':a-c}x = ${e-b}`)}<br>x = ${sn(x)}`})});
+topic('y8idx',8,'Laws of indices','Multiply → add the powers. Divide → subtract the powers. Power of a power → multiply the powers.',d=>{const v=P(['a','x','y','2','5']);const m=R(2,9),n=R(2,d===3?12:7);const k=R(0,d===1?1:d===2?2:3);
+ if(k===0)return Q(`${H(`${v}^${m} × ${v}^${n}`)} = ${v}<sup>?</sup>`,m+n,{wrong:[m*n,Math.abs(m-n),m+n+1],sol:`Add the powers: ${m} + ${n} = ${m+n}`});
+ if(k===1){const M=m+n;return Q(`${H(`${v}^${M} ÷ ${v}^${n}`)} = ${v}<sup>?</sup>`,m,{wrong:[M+n,M/n,m+1].filter(x=>Number.isInteger(x)),sol:`Subtract the powers: ${M} − ${n} = ${m}`})}
+ if(k===2)return Q(`${H(`(${v}^${m})^${n}`)} = ${v}<sup>?</sup>`,m*n,{wrong:[m+n,m**n>200?m*n+m:m**n,m*n-1],sol:`Multiply the powers: ${m} × ${n} = ${m*n}`});
+ return Q(`${H(`${v}^${m} ÷ ${v}^${m+n}`)} = ${v}<sup>?</sup>`,-n,{allowNeg:true,wrong:[n,2*m+n,0],sol:`Subtract the powers: ${m} − ${m+n} = −${n}`})});
+topic('y8sf',8,'Standard form','A × 10ⁿ where 1 ≤ A < 10. Count how many places the digits move.',d=>{const mant=fx(P([R(2,9),R(11,99)/10,R(101,999)/100]));const e=d===1?R(3,6):d===2?R(2,9):-R(2,6);const N=fx(mant*10**e);const sf=(m,x)=>`${nf(m)} × 10<sup>${sn(x)}</sup>`;
+ if(rnd()<.55)return Q(`Write ${nf(N)} in standard form.`,sf(mant,e),{wrong:[sf(mant,e+1),sf(mant,e-1),sf(fx(mant*10),e-1),sf(mant,-e)],sol:`Put the point after the first non-zero digit: ${nf(mant)}. The digits moved ${Math.abs(e)} places, so × 10<sup>${sn(e)}</sup>`});
+ return Q(`Write ${sf(mant,e)} as an ordinary number.`,N,{wrong:[fx(N*10),fx(N/10),fx(mant*10*Math.abs(e))],sol:`Move the digits ${Math.abs(e)} places ${e>0?'left (bigger)':'right (smaller)'}: ${nf(N)}`})});
+topic('y8pcc',8,'Percentage increase and decrease','Increase by p%: × (1 + p/100). Decrease by p%: × (1 − p/100). % change = change ÷ original × 100.',d=>{if(d===3&&rnd()<.6){const A=R(2,40)*20,p=R(1,19)*5,up=rnd()<.5;const B=up?A+A*p/100:A-A*p/100;const ch=Math.abs(B-A);return Q(`A price changes from £${A} to £${B}. What is the percentage ${up?'increase':'decrease'}?`,p,{unit:'%',wrong:[fx(ch/B*100),ch,fx(B/A*100)].filter(x=>Number.isFinite(x)),sol:`Change = £${ch}. ${ch} ÷ ${A} × 100 = ${p}%`})}let p,amt;if(d===1){p=R(1,9)*10;amt=R(1,30)*10}else{p=R(1,19)*5;amt=R(1,20)*20}const up=rnd()<.5;const v=up?amt+amt*p/100:amt-amt*p/100;return Q(`${up?'Increase':'Decrease'} £${amt} by ${p}%.`,v,{wrong:[amt*p/100,up?amt-amt*p/100:amt+amt*p/100,amt+(up?p:-p)],sol:`${p}% of ${amt} = ${nf(amt*p/100)}. ${amt} ${up?'+':'−'} ${nf(amt*p/100)} = £${nf(v)}`})});
+topic('y8ratio',8,'Ratio','Simplify by dividing both sides by the HCF. To share: total ÷ total parts, then × each part.',d=>{const k=R(0,d===1?0:2);
+ if(k===0){let a=R(1,9),b=R(1,9);while(gcd(a,b)!==1||a===b)b=R(1,9);const m=R(2,9);return Q(`Simplify the ratio ${a*m} : ${b*m}`,`${a} : ${b}`,{wrong:[`${b} : ${a}`,`${a*m/ (m%2?1:2)} : ${b*m/(m%2?1:2)}`,`${a+1} : ${b+1}`,`${a*m} : ${b}`],sol:`Divide both by ${m}: ${a} : ${b}`})}
+ if(k===1){const a=R(1,5),b=R(1,5),c=R(1,5),m=R(2,12),tot=(a+b+c)*m;return Q(`£${tot} is shared in the ratio ${a} : ${b} : ${c}. What is the largest share?`,Math.max(a,b,c)*m,{unit:'',wrong:[Math.round(tot/3),Math.min(a,b,c)*m,Math.max(a,b,c)*m+m],sol:`${a}+${b}+${c} = ${a+b+c} parts. ${tot} ÷ ${a+b+c} = ${m}. Largest: ${Math.max(a,b,c)} × ${m} = £${Math.max(a,b,c)*m}`})}
+ let a=R(1,7),b=R(1,7);if(a===b)b++;const m=R(2,9);return Q(`The ratio of boys to girls is ${a} : ${b}. There are ${b*m} girls. How many boys are there?`,a*m,{wrong:[b*m,(a+b)*m,b*m-(b-a)],sol:`${b*m} ÷ ${b} = ${m} per part. Boys: ${a} × ${m} = ${a*m}`})});
+topic('y8circ',8,'Circles — area and circumference','Circumference = π × d (or 2πr). Area = π × r². Round to 1 decimal place.',d=>{const r=d===3?R(3,29)/2:R(2,15);const useD=d>=2&&rnd()<.5;const isA=rnd()<.5;const v=isA?Math.PI*r*r:2*Math.PI*r;const ans=Math.round(v*10)/10;const ww=isA?[2*Math.PI*r,Math.PI*2*r*2*r,Math.PI*r*2]:[Math.PI*r*r,Math.PI*r,2*Math.PI*r*r];return Q(`A circle has ${useD?'diameter '+nf(2*r):'radius '+nf(r)} cm. Find its ${isA?'area':'circumference'} to 1 d.p.`,ans,{unit:isA?'cm²':'cm',wrong:ww.map(x=>Math.round(x*10)/10),sol:isA?`${useD?`r = ${nf(2*r)} ÷ 2 = ${nf(r)}. `:''}π × ${nf(r)}² = ${nf(ans)} cm²`:`π × ${nf(2*r)} = ${nf(ans)} cm`})});
+topic('y8ang',8,'Angles and polygons','Triangle 180°, straight line 180°, round a point 360°, quadrilateral 360°. Interior angles of an n-sided polygon add to (n − 2) × 180°. Exterior angles add to 360°.',d=>{const k=R(0,d===1?1:d===2?3:4);
+ if(k===0){const a=R(20,100),b=R(20,150-a);return Q(`Two angles in a triangle are ${a}° and ${b}°. Find the third angle.`,180-a-b,{unit:'°',wrong:[360-a-b,90-a-b>0?90-a-b:a+b,180-a],sol:`180 − ${a} − ${b} = ${180-a-b}°`})}
+ if(k===1){const a=R(10,170);return Q(`Angles on a straight line: one is ${a}°. What is the other?`,180-a,{unit:'°',wrong:[360-a,90-a>0?90-a:a+10,a],sol:`180 − ${a} = ${180-a}°`})}
+ if(k===2){const n=R(5,12);return Q(`What do the interior angles of a ${n}-sided polygon add up to?`,(n-2)*180,{unit:'°',wrong:[n*180,(n-1)*180,360],sol:`(${n} − 2) × 180 = ${(n-2)*180}°`})}
+ const n=P([3,4,5,6,8,9,10,12,15,18,20]);if(k===3)return Q(`What is each exterior angle of a regular ${n}-sided polygon?`,360/n,{unit:'°',wrong:[180-360/n,180/n,(n-2)*180/n===360/n?360/n+10:360/n*2],sol:`360 ÷ ${n} = ${360/n}°`});
+ return Q(`What is each interior angle of a regular ${n}-sided polygon?`,180-360/n,{unit:'°',wrong:[360/n,(n-2)*180,180-180/n],sol:`Exterior = 360 ÷ ${n} = ${360/n}°. Interior = 180 − ${360/n} = ${180-360/n}°`})});
+topic('y8nth',8,'nth term of linear sequences','The difference between terms goes in front of n. Then adjust: first term − difference.',d=>{const a=d===3&&rnd()<.5?-R(1,6):R(2,9),b=R(-9,9);const s=[1,2,3,4].map(n=>a*n+b);if(d===1&&rnd()<.5){const N=R(10,30);return Q(`The nth term is ${HP([[a,'n'],[b,'']])}. What is the ${ord(N)} term?`,a*N+b,{allowNeg:true,wrong:[a*N,a+N+b,a*(N+b)],sol:`${a} × ${N}${sg(b).replace('-','−')} = ${a*N+b}`})}const ans=[[a,'n'],[b,'']];return Q(`Find the nth term: ${s.map(sn).join(', ')}, …`,HP(ans),{wrong:polyAlts(ans,3,[[[a,'n'],[s[0],'']],[[1,'n'],[a,'']],[[b,'n'],[a,'']]]),sol:`Difference = ${sn(a)}, so start with ${sn(a)}n. 1st term ${sn(s[0])} − ${pn(a)} = ${sn(b)}. nth term = ${HP(ans)}`})});
+
+T.custom={id:'custom',y:0,name:'My own questions',hint:'',gen:null};
+// ==GEN END==
+
+/* ---------- storage ---------- */
+const LS='mathsTests.v1';let mem=null;
+function load(){try{const s=localStorage.getItem(LS);if(s)return JSON.parse(s)}catch(e){}return mem}
+function persist(){mem=store;try{localStorage.setItem(LS,JSON.stringify(store))}catch(e){}}
+const NOTEBOOK=['y7sf','y7div','y7mul','y7like','y7simp','y7eqm','y7metric'];
+const DEFAULT_SETS=[{name:'Notebook: all 7 topics',topics:NOTEBOOK},{name:'Notebook: needs work ☹',topics:['y7div','y7eqm','y7metric']}];
+function newProfile(name,year){return{id:'p'+Date.now().toString(36)+Math.floor(Math.random()*1e4),name,year,diff:2,count:20,pass:75,mode:'instant',timer:0,ntests:20,enabled:{},sets:JSON.parse(JSON.stringify(DEFAULT_SETS)),stats:{},tests:{},custom:[],mistakes:[],hist:[]}}
+let store=load();
+if(!store||!store.profiles||!store.profiles.length){store={profiles:[newProfile('Learner',7)],cur:null};store.cur=store.profiles[0].id}
+const prof=()=>store.profiles.find(p=>p.id===store.cur)||store.profiles[0];
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const acc=id=>{const a=prof().stats[id];if(!a||!a.length)return null;return a.reduce((s,x)=>s+x,0)/a.length};
+const face=v=>v===null?'<span class="mut">·</span>':v>=.8?'😀':v>=.5?'😐':'☹️';
+const enabledFor=y=>{const p=prof();const all=topicsFor(y);const e=p.enabled[y];const list=e?e.filter(id=>T[id]&&(T[id].y===y||id==='custom')):all;return list.length?list:all};
+const hash=s=>{let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0};
+
+function genQ(id,diff){if(id==='custom'){const c=prof().custom;if(!c.length)return null;const it=P(c);return finalize({q:esc(it.q),a:esc(it.c),wrong:it.w.map(esc),sol:'',topic:'custom'})}
+ for(let t=0;t<6;t++){try{const q=T[id].gen(diff);q.topic=id;finalize(q);if(q.opts.length>=2)return q}catch(e){console.warn(id,e)}}return null}
+function buildSet(ids,n,diff,seed){const old=rnd;if(seed!==undefined)rnd=mulberry32(seed);const out=[],seen=new Set();try{let pool=[];while(pool.length<n)pool=pool.concat(shuffle(ids));pool=shuffle(pool.slice(0,n));for(const id of pool){let q=null;for(let t=0;t<6;t++){q=genQ(id,diff);if(q&&!seen.has(q.q))break}if(q){seen.add(q.q);out.push(q)}}}finally{rnd=old}return out}
+
+/* ---------- state ---------- */
+let view='home',S=null,ui={showAllYears:false,pick:new Set(),reviewWrongOnly:false,confirm:null,setName:null,restoreText:''};
+function go(v){view=v;stopTimer();render();window.scrollTo(0,0)}
+
+/* ---------- test runner ---------- */
+function startTest(kind,qs,label,meta={}){if(!qs.length){toast('No questions available for that selection.');return}const p=prof();S={kind,label,qs,ans:new Array(qs.length).fill(null),i:0,mode:meta.mode||p.mode,t0:Date.now(),end:p.timer?Date.now()+p.timer*60000:0,meta,done:false};go('run');startTimer()}
+let tick=null;function startTimer(){stopTimer();if(S&&S.end&&!S.done)tick=setInterval(()=>{const el=$('#tmr');const left=S.end-Date.now();if(left<=0){finish();return}if(el){el.textContent=fmtT(left);el.classList.toggle('low',left<60000)}},500)}
+function stopTimer(){if(tick){clearInterval(tick);tick=null}}
+const fmtT=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+function choose(k){if(!S||S.done)return;if(S.mode==='instant'&&S.ans[S.i]!==null)return;S.ans[S.i]=k;render()}
+function finish(){if(!S||S.done)return;stopTimer();S.done=true;const p=prof();let score=0;S.qs.forEach((q,i)=>{const ok=S.ans[i]===q.correct;if(ok)score++;if(q.topic){(p.stats[q.topic]=p.stats[q.topic]||[]).push(ok?1:0);p.stats[q.topic]=p.stats[q.topic].slice(-20)}
+  const key=q.q+'|'+q.ans;if(!ok){if(!p.mistakes.some(m=>m.key===key))p.mistakes.push({key,topic:q.topic,q:q.q,opts:q.opts,correct:q.correct,ans:q.ans,sol:q.sol})}else if(S.kind==='mistakes'){p.mistakes=p.mistakes.filter(m=>m.key!==key)}});
+ p.mistakes=p.mistakes.slice(-60);const pct=Math.round(score/S.qs.length*100);S.score=score;S.pct=pct;S.passed=pct>=p.pass;S.secs=Math.round((Date.now()-S.t0)/1000);
+ if(S.kind==='numbered'){const y=S.meta.year,n=S.meta.n;p.tests[y]=p.tests[y]||{};const r=p.tests[y][n]||{best:0,att:0};r.best=Math.max(r.best,pct);r.last=pct;r.att++;p.tests[y][n]=r}
+ p.hist.push({d:Date.now(),label:S.label,score,total:S.qs.length,pct,year:p.year});p.hist=p.hist.slice(-50);persist();go('results')}
+
+/* ---------- rendering ---------- */
+const TABS=[['home','🏠','Home'],['tests','📝','Tests'],['topics','📚','Topics'],['progress','📈','Progress'],['settings','⚙️','Settings']];
+function render(){const p=prof();const app=$('#app');
+ $('#tabs').style.display=view==='run'?'none':'flex';
+ $('#tabs').innerHTML=TABS.map(([v,i,l])=>`<button data-go="${v}" class="${view===v||(view==='results'&&v==='tests')?'on':''}"><i>${i}</i>${l}</button>`).join('');
+ app.innerHTML=({home:vHome,tests:vTests,topics:vTopics,run:vRun,results:vResults,progress:vProgress,settings:vSettings}[view]||vHome)();
+ if(view==='run'&&S&&S.end)startTimer();
+ if(window.MathFix)MathFix()}
+function header(title){const p=prof();return `<header class="top"><h1>${title}</h1><button class="pill" data-go="settings">👤 ${esc(p.name)} · Y${p.year}</button></header>`}
+function yearSeg(){const p=prof();return `<div class="seg">${[1,2,3,4,5,6,7,8].map(y=>`<button data-year="${y}" class="${p.year===y?'on':''}">${y}</button>`).join('')}</div>`}
+function readiness(){const p=prof();const h=p.hist.filter(x=>x.year===p.year).slice(-5);if(!h.length)return null;return Math.round(h.reduce((s,x)=>s+x.pct,0)/h.length)}
+function vHome(){const p=prof();const y=p.year;const tr=p.tests[y]||{};const passed=Object.values(tr).filter(r=>r.best>=p.pass).length;const rd=readiness();let next=1;while(next<=p.ntests&&tr[next]&&tr[next].best>=p.pass)next++;if(next>p.ntests)next=1;
+ return header('Maths Practice Tests')+`
+ <div class="card"><h2>Year group</h2><p class="mut sm" style="margin:2px 0 10px">Tests use the topics for the year you pick.</p>${yearSeg()}</div>
+ <div class="card"><div class="row" style="align-items:center"><div><h2>Year ${y} readiness</h2><div class="mut sm">${rd===null?'Take a test to see your score':'Average of your last '+Math.min(5,p.hist.filter(x=>x.year===y).length)+' tests'}</div></div><div style="flex:0;font-size:32px;font-weight:900;color:${rd===null?'var(--mut)':rd>=p.pass?'var(--ok)':'var(--amb)'}">${rd===null?'—':rd+'%'}</div></div><div class="sp"></div><div class="bar"><i style="width:${rd||0}%"></i></div><div class="sp"></div><div class="mut sm">Practice tests passed: <b>${passed} / ${p.ntests}</b> · pass mark ${p.pass}%</div></div>
+ <div class="card big" data-act="next" data-n="${next}"><div class="ic">▶️</div><div class="tx"><b>Practice test ${next}</b><span>${p.count} questions · Year ${y}</span></div><div class="ch">›</div></div>
+ <div class="card big" data-act="random"><div class="ic">🎲</div><div class="tx"><b>Random test</b><span>${p.count} questions picked at random</span></div><div class="ch">›</div></div>
+ <div class="card big" data-act="mistakes"><div class="ic">🔁</div><div class="tx"><b>Review my mistakes</b><span>${p.mistakes.length?p.mistakes.length+' question'+(p.mistakes.length>1?'s':'')+' to try again':'Nothing yet — wrong answers land here'}</span></div><div class="ch">›</div></div>
+ ${p.sets.length?`<div class="card"><h2>Quick tests</h2><p class="mut sm" style="margin:2px 0 10px">${p.count} random questions from a saved topic list.</p><div class="chips">${p.sets.map((s,i)=>`<button class="chip" data-set="${i}">${esc(s.name)}</button>`).join('')}</div></div>`:''}`}
+function vTests(){const p=prof();const y=p.year;const tr=p.tests[y]||{};let tiles='';for(let n=1;n<=p.ntests;n++){const r=tr[n];tiles+=`<button class="tile ${r?(r.best>=p.pass?'pass':'fail'):''}" data-act="test" data-n="${n}"><b>Test ${n}</b><span>${r?r.best+'%':'—'}</span></button>`}
+ return header('Practice tests')+`<div class="card"><h2>Year ${y} — ${p.ntests} tests</h2><p class="mut sm" style="margin:2px 0 12px">Each test has the same ${p.count} questions every time, so you can retake it and beat your best score. Green = passed (${p.pass}%+).</p><div class="grid">${tiles}</div></div>
+ <div class="card big" data-act="random"><div class="ic">🎲</div><div class="tx"><b>Random test</b><span>New questions every time</span></div><div class="ch">›</div></div>
+ <div class="card"><h2>Change year</h2><div class="sp"></div>${yearSeg()}</div>`}
+function vTopics(){const p=prof();const years=ui.showAllYears?[1,2,3,4,5,6,7,8]:[p.year];let html='';
+ for(const y of years){html+=`<h3>Year ${y}</h3>`+topicsFor(y).map(id=>topicRow(id)).join('')}
+ if(p.custom.length)html+=`<h3>Custom</h3>`+topicRow('custom');
+ const n=ui.pick.size;
+ return header('Practise by topic')+`<div class="card"><p class="mut sm" style="margin:0 0 6px">Tick one or more topics, then start a ${p.count}-question test. Faces show your last 20 answers: 😀 80%+ · 😐 50–79% · ☹️ under 50%.</p>
+ <label class="trow" style="border:0"><input type="checkbox" data-act="allyears" ${ui.showAllYears?'checked':''}><span class="nm">Show topics from every year</span></label>${html}</div>
+ <div class="card" style="position:sticky;bottom:calc(70px + env(safe-area-inset-bottom));z-index:3"><button class="btn" data-act="topicgo" ${n?'':'disabled'}>Start test${n?` (${n} topic${n>1?'s':''})`:''}</button>${n?`<div class="sp"></div>${ui.setName!==null?`<div class="row"><input type="text" id="setname" placeholder="Name this quick test" value="${esc(ui.setName)}"><button class="btn sec" style="flex:0 0 90px" data-act="saveset">Save</button></div>`:`<button class="btn ghost" data-act="namedset">Save as a quick test</button>`}`:''}</div>`}
+function topicRow(id){const t=T[id];const a=acc(id);const n=(prof().stats[id]||[]).length;return `<label class="trow"><input type="checkbox" data-pick="${id}" ${ui.pick.has(id)?'checked':''}><span class="nm">${t.name}<small>${n?Math.round(a*100)+'% of last '+n:'Not tried yet'}</small></span><span class="face">${face(a)}</span></label>`}
+function vRun(){const q=S.qs[S.i],a=S.ans[S.i],inst=S.mode==='instant',n=S.qs.length,show=inst&&a!==null;const t=T[q.topic];
+ let opts=q.opts.map((o,k)=>{let c='';if(show){if(k===q.correct)c='right';else if(k===a)c='wrong'}else if(a===k)c='sel';return `<button class="opt ${c}" data-opt="${k}" ${show?'disabled':''}><span class="L">${'ABCD'[k]}</span><span>${o}</span></button>`}).join('');
+ let fb='';if(show){const ok=a===q.correct;fb=`<div class="fb ${ok?'ok':'no'}"><b class="h">${ok?'✅ Correct':'❌ Not quite — the answer is '+q.ans}</b>${q.sol||''}</div>`}
+ const answered=S.ans.filter(x=>x!==null).length;const last=S.i===n-1;
+ let nav;if(inst){nav=show?`<button class="btn" data-act="nextq">${last?'See results':'Next question'}</button>`:`<button class="btn ghost" data-act="hint">💡 Hint</button>`}
+ else{nav=`<div class="row"><button class="btn sec" data-act="prevq" ${S.i?'':'disabled'}>‹ Back</button>${last?`<button class="btn" data-act="finish">Finish</button>`:`<button class="btn" data-act="nextq">Next ›</button>`}</div>`}
+ const dots=`<div class="dots">${S.qs.map((qq,i)=>{let c='';const v=S.ans[i];if(inst&&v!==null)c=v===qq.correct?'r':'w';else if(v!==null)c='a';return `<button data-jump="${i}" class="${c} ${i===S.i?'cur':''}">${i+1}</button>`}).join('')}</div>`;
+ const conf=ui.confirm==='quit'?`<div class="card"><b>Leave this test?</b><p class="mut sm">Your answers so far won't be saved.</p><div class="row"><button class="btn sec" data-act="cancelc">Keep going</button><button class="btn danger" data-act="quit">Leave</button></div></div>`:ui.confirm==='finish'?`<div class="card"><b>Finish now?</b><p class="mut sm">${n-answered} question${n-answered===1?'':'s'} not answered — they count as wrong.</p><div class="row"><button class="btn sec" data-act="cancelc">Go back</button><button class="btn" data-act="finishnow">Finish</button></div></div>`:'';
+ return `<div class="qhead"><button class="pill" data-act="askquit">✕</button><span class="n">${S.i+1} / ${n}</span><span class="tp">${esc(S.label)}${t?' · '+t.name:''}</span>${S.end?`<span class="timer" id="tmr">${fmtT(S.end-Date.now())}</span>`:''}</div>
+ <div class="bar" style="margin-bottom:14px"><i style="width:${(inst?S.ans.filter(x=>x!==null).length:S.i+1)/n*100}%"></i></div>
+ ${conf}<div class="card"><div class="qtext">${q.q}</div>${opts}${fb}<div id="hint"></div>${nav}</div>
+ ${inst?'':`<div class="card"><div class="mut sm">Jump to a question (${answered}/${n} answered)</div>${dots}${!last?`<div class="sp"></div><button class="btn ghost" data-act="finish">Finish test</button>`:''}</div>`}`}
+function vResults(){const p=prof();const r=S;const byT={};r.qs.forEach((q,i)=>{const k=q.topic;byT[k]=byT[k]||[0,0];byT[k][1]++;if(r.ans[i]===q.correct)byT[k][0]++});
+ const list=r.qs.map((q,i)=>({q,i,ok:r.ans[i]===q.correct})).filter(x=>!ui.reviewWrongOnly||!x.ok);
+ return `<header class="top"><h1>${esc(r.label)}</h1></header>
+ <div class="banner ${r.passed?'pass':'fail'}"><div class="sc">${r.score} / ${r.qs.length}</div><div class="vd">${r.passed?'PASS':'NOT YET'} · ${r.pct}%</div><div class="mut sm" style="margin-top:6px">Pass mark ${p.pass}% · time ${fmtT(r.secs*1000)}</div></div>
+ <div class="row" style="margin-bottom:12px"><button class="btn sec" data-act="again">Retake</button><button class="btn" data-go="home">Done</button></div>
+ <div class="card"><h2>By topic</h2>${Object.entries(byT).map(([k,[c,t]])=>`<div class="trow"><span class="nm">${T[k]?T[k].name:'Question'}</span><b>${c}/${t}</b><span class="face">${face(c/t)}</span></div>`).join('')}</div>
+ <div class="card"><div class="row" style="align-items:center"><h2>Review answers</h2><label class="sm" style="flex:0 0 auto;display:flex;gap:6px;align-items:center"><input type="checkbox" data-act="wrongonly" ${ui.reviewWrongOnly?'checked':''}>Wrong only</label></div>
+ ${list.length?list.map(({q,i,ok})=>`<div class="rv"><div><span class="tag ${ok?'ok':'no'}">Q${i+1} ${ok?'✓':'✗'}</span></div><div class="qq">${q.q}</div><div class="sm">${r.ans[i]===null?'<span class="mut">Not answered</span>':ok?'':'Your answer: <b>'+q.opts[r.ans[i]]+'</b><br>'}Correct: <b>${q.ans}</b></div>${q.sol?`<div class="sm mut" style="margin-top:4px">${q.sol}</div>`:''}</div>`).join(''):'<p class="mut">All correct — nothing to review! 🎉</p>'}</div>`}
+function vProgress(){const p=prof();const ids=Object.keys(p.stats).filter(id=>T[id]&&p.stats[id].length).sort((a,b)=>acc(a)-acc(b));const h=p.hist.slice(-10).reverse();
+ return header('Progress')+`<div class="card"><h2>Topics</h2><p class="mut sm" style="margin:2px 0 6px">Weakest first. Based on the last 20 answers per topic.</p>${ids.length?ids.map(id=>{const a=acc(id);return `<div class="trow"><span class="nm">${T[id].name}<small>Year ${T[id].y||'—'} · ${p.stats[id].length} answers</small><div class="bar" style="margin-top:6px;height:7px"><i style="width:${Math.round(a*100)}%;background:${a>=.8?'var(--ok)':a>=.5?'var(--amb)':'var(--bad)'}"></i></div></span><b>${Math.round(a*100)}%</b><span class="face">${face(a)}</span></div>`}).join('')+`<div class="sp"></div><button class="btn" data-act="weakest">Test my 3 weakest topics</button>`:'<p class="mut">No answers yet. Take a test to start tracking.</p>'}</div>
+ <div class="card"><h2>Recent tests</h2>${h.length?h.map(x=>`<div class="trow"><span class="nm">${esc(x.label)}<small>${new Date(x.d).toLocaleDateString('en-GB',{day:'numeric',month:'short'})} · Year ${x.year}</small></span><b style="color:${x.pct>=p.pass?'var(--ok)':'var(--bad)'}">${x.score}/${x.total}</b></div>`).join(''):'<p class="mut">None yet.</p>'}</div>
+ <div class="card">${ui.confirm==='reset'?`<b>Reset all progress for ${esc(p.name)}?</b><div class="sp"></div><div class="row"><button class="btn sec" data-act="cancelc">Cancel</button><button class="btn danger" data-act="doreset">Reset</button></div>`:`<button class="btn danger" data-act="askreset">Reset progress</button>`}</div>`}
+function vSettings(){const p=prof();const seg=(key,vals,lab)=>`<div class="seg">${vals.map((v,i)=>`<button data-setk="${key}" data-v="${v}" class="${p[key]==v?'on':''}">${lab?lab[i]:v}</button>`).join('')}</div>`;const y=p.year;const en=new Set(enabledFor(y));
+ return header('Settings')+`
+ <div class="card"><h2>Learner</h2><div class="sp"></div><input type="text" id="pname" value="${esc(p.name)}" maxlength="24" placeholder="Name">
+ ${store.profiles.length>1?`<h3>Switch learner</h3><div class="chips">${store.profiles.map(q=>`<button class="chip" data-prof="${q.id}" style="${q.id===p.id?'background:var(--pri);color:#fff':''}">${esc(q.name)} · Y${q.year}</button>`).join('')}</div>`:''}
+ <div class="sp"></div><div class="row"><button class="btn sec" data-act="addprof">+ Add learner</button>${store.profiles.length>1?(ui.confirm==='delprof'?`<button class="btn danger" data-act="delprof">Confirm delete</button>`:`<button class="btn ghost" data-act="askdelprof">Delete</button>`):''}</div></div>
+ <div class="card"><h2>Year group</h2><div class="sp"></div>${yearSeg()}</div>
+ <div class="card"><h2>Tests</h2><h3>Questions per test</h3>${seg('count',[10,20,24,30])}<h3>Pass mark</h3>${seg('pass',[60,70,75,80,90],['60%','70%','75%','80%','90%'])}<h3>Difficulty</h3>${seg('diff',[1,2,3],['Easier','Standard','Harder'])}<h3>Answer mode</h3>${seg('mode',['instant','exam'],['Instant feedback','Exam (marks at end)'])}<h3>Time limit</h3>${seg('timer',[0,10,20,30,45],['Off','10 min','20 min','30 min','45 min'])}<h3>Numbered tests per year</h3>${seg('ntests',[10,20,30,40])}</div>
+ <div class="card"><h2>Topics in Year ${y} tests</h2><p class="mut sm" style="margin:2px 0 4px">Untick topics your child hasn't covered yet. Numbered tests are rebuilt from the ticked topics.</p>${topicsFor(y).map(id=>`<label class="trow"><input type="checkbox" data-en="${id}" ${en.has(id)?'checked':''}><span class="nm">${T[id].name}</span></label>`).join('')}${p.custom.length?`<label class="trow"><input type="checkbox" data-en="custom" ${(p.enabled[y]||[]).includes('custom')?'checked':''}><span class="nm">My own questions</span></label>`:''}</div>
+ <div class="card"><h2>Quick tests</h2>${p.sets.length?p.sets.map((s,i)=>`<div class="trow"><span class="nm">${esc(s.name)}<small>${s.topics.map(id=>T[id]?T[id].name:'').filter(Boolean).join(', ')}</small></span><button class="lnk" data-delset="${i}">Remove</button></div>`).join(''):'<p class="mut sm">None. Create them on the Topics tab.</p>'}</div>
+ <div class="card"><h2>My own questions</h2><p class="mut sm" style="margin:2px 0 8px">One per line: <b>question | correct answer | wrong | wrong | wrong</b><br>e.g. <code>7 × 8 = ? | 56 | 54 | 48 | 63</code></p><textarea id="cq" placeholder="What is 15% of 60? | 9 | 6 | 15 | 12">${esc(p.custom.map(c=>[c.q,c.c,...c.w].join(' | ')).join('\n'))}</textarea><div class="sp"></div><button class="btn sec" data-act="savecq">Save questions</button></div>
+ <div class="card"><h2>Backup</h2><p class="mut sm" style="margin:2px 0 8px">Progress is kept on this device only. Copy a backup to move it to another phone.</p><button class="btn sec" data-act="copyb">Copy backup</button><div class="sp"></div><textarea id="rb" style="min-height:70px" placeholder="Paste a backup here to restore"></textarea><div class="sp"></div><button class="btn ghost" data-act="restore">Restore</button></div>
+ <div class="card"><h2>Install on a phone</h2><p class="sm"><b>iPhone / iPad:</b> open in Safari → Share → <i>Add to Home Screen</i>.<br><b>Android:</b> open in Chrome → ⋮ menu → <i>Install app</i> or <i>Add to Home screen</i>.</p></div>`}
+
+/* ---------- events ---------- */
+let toastT;function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:800;z-index:9;max-width:90%;text-align:center';document.body.appendChild(t)}t.textContent=m;t.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>t.style.display='none',2200)}
+function testLabel(n){return `Year ${prof().year} · Test ${n}`}
+function runNumbered(n){const p=prof(),y=p.year,ids=enabledFor(y);const seed=hash(`${y}|${n}|${p.diff}|${p.count}|${ids.join(',')}`);startTest('numbered',buildSet(ids,p.count,p.diff,seed),testLabel(n),{year:y,n})}
+function runRandom(ids,label){const p=prof();startTest('random',buildSet(ids,p.count,p.diff),label,{ids})}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go],[data-act],[data-year],[data-opt],[data-jump],[data-set],[data-pick],[data-setk],[data-en],[data-prof],[data-delset]');if(!b)return;const p=prof();const d=b.dataset;
+ if(d.go){ui.confirm=null;go(d.go);return}
+ if(d.year){p.year=+d.year;persist();render();return}
+ if(d.opt!==undefined){choose(+d.opt);return}
+ if(d.jump!==undefined){S.i=+d.jump;render();return}
+ if(d.set!==undefined){const s=p.sets[+d.set];runRandom(s.topics.filter(id=>T[id]),s.name);return}
+ if(d.pick){d.pick&&(b.checked?ui.pick.add(d.pick):ui.pick.delete(d.pick));render();return}
+ if(d.setk){const v=d.v;p[d.setk]=isNaN(+v)?v:+v;persist();render();return}
+ if(d.en){const y=p.year;const cur=new Set(enabledFor(y));b.checked?cur.add(d.en):cur.delete(d.en);if(!cur.size){toast('Keep at least one topic');b.checked=true;return}p.enabled[y]=[...cur];persist();return}
+ if(d.prof){store.cur=d.prof;persist();ui.pick.clear();render();return}
+ if(d.delset!==undefined){p.sets.splice(+d.delset,1);persist();render();return}
+ switch(d.act){
+  case 'next':case 'test':runNumbered(+d.n);break;
+  case 'random':runRandom(enabledFor(p.year),`Year ${p.year} · Random test`);break;
+  case 'mistakes':{if(!p.mistakes.length){toast('No mistakes saved yet');break}const m=shuffle(p.mistakes).slice(0,p.count).map(x=>Object.assign({},x));startTest('mistakes',m,'Mistakes review');break}
+  case 'allyears':ui.showAllYears=b.checked;render();break;
+  case 'topicgo':runRandom([...ui.pick],ui.pick.size===1?T[[...ui.pick][0]].name:'Topic test');break;
+  case 'namedset':ui.setName='';render();setTimeout(()=>{const i=$('#setname');i&&i.focus()},50);break;
+  case 'saveset':{const nm=($('#setname').value||'').trim()||'My quick test';p.sets.push({name:nm,topics:[...ui.pick]});ui.setName=null;persist();toast('Saved to Home → Quick tests');render();break}
+  case 'weakest':{const ids=Object.keys(p.stats).filter(id=>T[id]&&p.stats[id].length).sort((a,b)=>acc(a)-acc(b)).slice(0,3);runRandom(ids,'Weakest topics');break}
+  case 'hint':{const t=T[S.qs[S.i].topic];$('#hint').innerHTML=`<div class="fb" style="background:var(--ambbg)">💡 ${t&&t.hint?t.hint:'Read the question carefully and rule out answers that are clearly wrong.'}</div>`;break}
+  case 'nextq':if(S.i<S.qs.length-1){S.i++;render();window.scrollTo(0,0)}else finish();break;
+  case 'prevq':if(S.i>0){S.i--;render()}break;
+  case 'finish':{const un=S.ans.filter(x=>x===null).length;if(un){ui.confirm='finish';render()}else finish();break}
+  case 'finishnow':ui.confirm=null;finish();break;
+  case 'askquit':ui.confirm='quit';render();break;
+  case 'quit':ui.confirm=null;stopTimer();S=null;go('home');break;
+  case 'cancelc':ui.confirm=null;render();break;
+  case 'again':{if(S.kind==='numbered')runNumbered(S.meta.n);else if(S.kind==='mistakes'){const m=shuffle(prof().mistakes).slice(0,p.count).map(x=>Object.assign({},x));if(m.length)startTest('mistakes',m,'Mistakes review');else{toast('All mistakes cleared! 🎉');go('home')}}else runRandom(S.meta.ids||enabledFor(p.year),S.label);break}
+  case 'wrongonly':ui.reviewWrongOnly=b.checked;render();break;
+  case 'askreset':ui.confirm='reset';render();break;
+  case 'doreset':p.stats={};p.tests={};p.hist=[];p.mistakes=[];ui.confirm=null;persist();render();toast('Progress reset');break;
+  case 'addprof':{const np=newProfile('Learner '+(store.profiles.length+1),p.year);store.profiles.push(np);store.cur=np.id;persist();render();toast('New learner added — rename it above');break}
+  case 'askdelprof':ui.confirm='delprof';render();break;
+  case 'delprof':store.profiles=store.profiles.filter(x=>x.id!==p.id);store.cur=store.profiles[0].id;ui.confirm=null;persist();render();break;
+  case 'savecq':{const lines=$('#cq').value.split('\n').map(l=>l.split('|').map(s=>s.trim())).filter(a=>a.length>=3&&a[0]&&a[1]);p.custom=lines.map(a=>({q:a[0],c:a[1],w:a.slice(2).filter(Boolean).slice(0,3)}));persist();toast(`${p.custom.length} question${p.custom.length===1?'':'s'} saved`);render();break}
+  case 'copyb':{const txt=JSON.stringify(store);try{navigator.clipboard.writeText(txt).then(()=>toast('Backup copied'),()=>{$('#rb').value=txt;toast('Copy the text in the box')})}catch(err){$('#rb').value=txt;toast('Copy the text in the box')}break}
+  case 'restore':{try{const s=JSON.parse($('#rb').value);if(!s.profiles||!s.profiles.length)throw 0;store=s;persist();toast('Restored');render()}catch(err){toast('That backup could not be read')}break}
+ }});
+document.addEventListener('change',e=>{if(e.target.id==='pname'){prof().name=e.target.value.trim()||'Learner';persist();render()}});
+document.addEventListener('keydown',e=>{if(view!=='run'||!S||S.done)return;const k='abcd1234'.indexOf(e.key.toLowerCase());if(k>=0){choose(k%4)}else if(e.key==='Enter'){const nb=document.querySelector('[data-act="nextq"],[data-act="finish"]');nb&&nb.click()}});
+render();
+try{if('serviceWorker' in navigator&&location.protocol==='https:'&&!/claude|anthropic/.test(location.hostname))navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}
+</script>
+</body>
+</html>
